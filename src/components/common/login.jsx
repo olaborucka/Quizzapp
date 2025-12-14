@@ -1,0 +1,45 @@
+import { useState, useContext } from 'react';
+import { AppContext } from '../../context/AppContext';
+import { Link, useNavigate } from 'react-router-dom';
+
+function LogBar(){
+    const {user, points, handleLogin} = useContext(AppContext)
+    const [inputValue, setInputValue] = useState("");
+
+    const navigate = useNavigate();
+
+    const onEnterClick = () =>{
+        if (inputValue.trim() !== ""){
+            handleLogin(inputValue);
+            navigate('/');
+        }
+    }
+
+    if (user) {
+        return(
+            <nav id='navlogin' className='logged-in'>
+                <span className='shop'><Link to ="/shop">Sklep</Link></span>
+                <span> Witaj, <strong>{user}</strong>!</span>
+                <span className="points">💰 {points} pkt</span>
+
+            </nav>
+        )
+    }
+    return(
+        <nav id='navlogin'>
+            <div>
+                <input 
+                    type="text"
+                    name='login' 
+                    id='login' 
+                    placeholder='podaj nick'
+                    value={inputValue} 
+                    onChange={(e)=> setInputValue(e.target.value)}
+                />
+            </div>
+            <button onClick={onEnterClick}>Wchodzę!</button>
+        </nav>
+    )
+}
+
+export default LogBar
