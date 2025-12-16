@@ -29,7 +29,7 @@ function Game() {
         }
         
         if (filteredQuestions.length === 0) {
-            // alert("Brak pytań..."); // Możesz odkomentować
+            alert("Brak pytań...");
             navigate('/'); 
         } else {
             setGameQuestions(filteredQuestions);

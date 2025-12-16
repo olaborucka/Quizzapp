@@ -19,7 +19,7 @@ function TextGame(){
             
             <div className="buttons-grid">
                 <button onClick={() => startGame('MIX')}>MIX</button>
-                <button onClick={() => startGame('Informatyka i Technologia')}>Informatyka i Technologia</button>
+                <button onClick={() => startGame('Informatyka')}>Informatyka</button>
                 <button onClick={() => startGame('Geografia')}>Geografia</button>
                 <button onClick={() => startGame('Histotia')}>Historia</button>
                 <button onClick={() => startGame('Nauka')}>Nauka</button>
