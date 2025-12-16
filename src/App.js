@@ -5,9 +5,11 @@ import { AppContext } from './context/AppContext.js';
 import Header from './components/layout/header.jsx'
 import GameModes from './components/common/GameModes.jsx'
 import LogBar from './components/common/login.jsx';
-import textGame from './components/game/text.jsx';
-import visualGame from './components/game/visual.jsx';
+import VisualGame from './components/game/visual.jsx';
+import TextGame from './components/game/text.jsx';  
 import Shop from './pages/Shop.jsx';
+import Game from './pages/Game.jsx';      
+import Profile from './pages/Profile.jsx'
 
 
 function App() {
@@ -32,12 +34,20 @@ function App() {
                     <Route path="/shop" element={user ? <Shop /> : <p>Zaloguj się</p>} />
                     <Route 
                         path="/game/visual" 
-                        element={user ? <visualGame/> : <p>Zaloguj się</p>} 
+                        element={user ? <VisualGame/> : <p>Zaloguj się</p>} 
                     />
 
                     <Route 
                         path="/game/text" 
-                        element={user ? <textGame/> : <p>Zaloguj się</p>} 
+                        element={user ? <TextGame/> : <p>Zaloguj się</p>} 
+                    />
+                    <Route 
+                        path="/play"
+                        element={user ? <Game /> : <p>Zaloguj się</p>}
+                    />
+                    <Route 
+                        path="/profile"
+                        element={user ? <Profile /> : <p>Zaloguj się</p>}
                     />
 
                 </Routes>
