@@ -1,12 +1,19 @@
 import { useState, useContext } from 'react';
 import { AppContext } from '../../context/AppContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 function LogBar(){
     const {user, points, handleLogin} = useContext(AppContext)
     const [inputValue, setInputValue] = useState("");
 
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const hiddenPaths = ['/play', '/game/visual', '/game/text'];
+    
+    if (hiddenPaths.includes(location.pathname)) {
+        return null;
+    }
 
     const onEnterClick = () =>{
         if (inputValue.trim() !== ""){
