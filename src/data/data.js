@@ -528,7 +528,7 @@ export const questions = [
         category: 'Geografia',
         difficulty: 'easy',
         question: "Jakiego kraju to flaga?",
-        image: "/images/flaga_polska.jpg",
+        image: "/images/flaga_polski.jpg",
         answers: ["Polska", "Indonezja", "Monako", "Singapur"],
         correctAnswer: "Polska"
     },

@@ -5,59 +5,113 @@ export const AppContext = createContext();
 
 export const AppProvider = ({children}) => {
 
-    // 1. To jest Twoja "Baza Danych" wszystkich graczy.
-    // Trzymamy tu obiekt w stylu: { "Ola": 100, "Marek": 20 }
     const [usersDb, setUsersDb] = useLocalStorage("quizUsersDB", {});
-
-    // 2. To jest aktualna sesja (kto jest zalogowany teraz)
     const [user, setUser] = useLocalStorage("currentUser", null);
+
+    // Domyślne stany (synchronizowane z userem przy logowaniu)
+    const [inventory, setInventory] = useState(['white']); // Zmienilem na useState, bo i tak ładujemy to z usersDb
+    const [equipped, setEquipped] = useState({ 
+        background: 'white', 
+        character: null 
+    });
     
-    // 3. Punkty w aktualnej grze (trzymamy w zwykłym useState, bo synchronizujemy je z bazą poniżej)
     const [points, setPoints] = useState(0);
+
+    
+    // --- FUNKCJA KUPOWANIA ---
+    // --- POPRAWIONA FUNKCJA KUPOWANIA ---
+    const buyItem = (item) => {
+        // Zmieniamy item.id na item.item (czyli zapisujemy 'black' a nie '2')
+        if (item.price <= points && !inventory.includes(item.item)) {
+            setPoints(points - item.price);
+            setInventory([...inventory, item.item]); 
+            return true; // Sukces
+        }
+        return false; // Porażka
+    }
+
+    // --- POPRAWIONA FUNKCJA ZAKŁADANIA ---
+    const equipItem = (item) => {
+        // 1. Sprawdzamy czy mamy przedmiot (szukamy nazwy np. 'white')
+        if (inventory.includes(item.item)) {
+            setEquipped(prev => ({
+                ...prev,
+                // 2. WAŻNE: Używamy 'category' (bo tak nazwałaś to w sklepie), a nie 'type'
+                [item.category]: item.item 
+            }));
+            return true;
+        }
+        return false;
+    }
+    const resetAppearance = () => {
+        setEquipped({ 
+            background: 'default', // <--- TERAZ USTAWIA .bg-default
+            character: null 
+        });
+    }
+
 
     // --- FUNKCJA LOGOWANIA ---
     const handleLogin = (nick) => {
         setUser(nick);
         
-        // Sprawdzamy, czy ten nick już grał
         if (usersDb[nick]) {
-            // Jeśli tak, wczytaj jego punkty z bazy
-            setPoints(usersDb[nick]);
+            // Wczytaj wszystko z bazy
+            setPoints(usersDb[nick].points || 0);
+            setInventory(usersDb[nick].inventory || ['white']); // POPRAWKA: Wczytaj plecak
+            setEquipped(usersDb[nick].equipped || { background: 'white', character: null }); // POPRAWKA: Wczytaj strój
         } else {
-            // Jeśli to nowy gracz, ustaw 0
+            // Nowy gracz - ustaw domyślne
             setPoints(0);
+            setInventory(['white']);
+            setEquipped({ background: 'white', character: null });
         }
     }
 
     // --- FUNKCJA WYLOGOWANIA ---
     const handleLogout = () => {
-        // Tylko czyścimy sesję ("wstajemy od komputera")
         setUser(null);
         setPoints(0);
+        setInventory(['white']); // Resetuj po wylogowaniu
+        setEquipped({ background: 'white', character: null });
         
-        // WAŻNE: Usuwamy tylko informację KTO jest zalogowany, 
-        // ale NIE KASUJEMY bazy danych (usersDb)!
         localStorage.removeItem("currentUser");
     }
 
     // --- AUTOMATYCZNY ZAPIS ---
-    // Ten efekt uruchamia się za każdym razem, gdy zmienią się punkty.
-    // Jeśli ktoś jest zalogowany, aktualizujemy jego wynik w "Bazie Danych".
     useEffect(() => {
         if (user) {
             setUsersDb(prevDb => ({
-                ...prevDb,      // Zachowaj innych graczy
-                [user]: points  // Zaktualizuj tylko obecnego gracza
+                ...prevDb,
+                [user]: { 
+                    points: points,
+                    inventory: inventory, // POPRAWKA: Zapisujemy też plecak!
+                    equipped: equipped    // POPRAWKA: Zapisujemy też strój!
+                } 
             }));
         }
-    }, [points, user]); // Reaguj na zmiany punktów i użytkownika
+    }, [points, inventory, equipped, user]); // Reaguj na zmiany wszystkiego
 
+
+    // --- EFEKT WIZUALNY TŁA ---
+    // To sprawi, że tło strony zmieni się od razu po założeniu przedmiotu
+    useEffect(() => {
+        // Ustawia klasę np. "bg-black" albo "bg-white" na elemencie <body>
+        document.body.className = `bg-${equipped.background}`;
+    }, [equipped.background]);
+
+
+    // POPRAWKA: Musisz udostępnić te rzeczy reszcie aplikacji!
     const contextValue = {
         user,
-        points,
-        setPoints,
+        points, setPoints,
+        inventory, 
+        equipped,  
+        buyItem,   
+        equipItem, 
         handleLogin,
-        handleLogout
+        handleLogout,
+        resetAppearance
     };
 
     return (

@@ -108,9 +108,7 @@ header {
         }
     }
 }
-
-/* --- MENU KATEGORII (VisualGame / TextGame) - AKTUALIZACJA! --- */
-/* Zastąpiłem .gmbtn nowymi klasami, których używasz w React */
+/* --- KONTENER MENU --- */
 
 .menu-container {
     max-width: 800px;
@@ -457,3 +455,187 @@ header {
     }
   }
 }
+
+
+/* --- SKLEP (SHOP) --- */
+
+.shop-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  color: white;
+
+  /* Nagłówek sklepu */
+  .shop-header {
+    text-align: center;
+    margin-bottom: 30px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 15px;
+
+    h3 {
+      font-size: 2.5rem;
+      margin: 0 0 10px 0;
+      color: #ffd700; /* Złoty tytuł */
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin: 0;
+      
+      strong {
+        color: #2ecc71; /* Zielony kolor punktów */
+        font-size: 1.4rem;
+      }
+    }
+    /* Wewnątrz .shop-container -> .shop-header */
+
+    .reset-look-btn {
+      margin-top: 15px; /* Odstęp od licznika punktów */
+      background-color: rgba(255, 255, 255, 0.05); /* Bardzo delikatne tło */
+      border: 1px solid rgba(255, 255, 255, 0.3); /* Półprzezroczysta biała ramka */
+      color: #dfe6e9; /* Jasny szary tekst */
+      padding: 8px 20px;
+      border-radius: 25px; /* Mocno zaokrąglone rogi */
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      
+      /* Centrowanie przycisku */
+      display: block; 
+      margin-left: auto;
+      margin-right: auto;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2); /* Jaśniejsze tło po najechaniu */
+        border-color: #ffffff; /* Biała ramka */
+        color: #ffffff; /* Biały tekst */
+        transform: translateY(-2px); /* Lekkie uniesienie */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Cień pod spodem */
+      }
+
+      &:active {
+        transform: translateY(0); /* Efekt wciśnięcia */
+      }
+}
+  }
+
+  /* Menu kategorii (przyciski na górze) */
+  .shop-categories {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 30px;
+
+    button {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.25);
+        transform: translateY(-2px);
+      }
+
+      /* Opcjonalnie: Styl dla aktywnej kategorii (jeśli dodasz klasę .active w React) */
+      &:focus {
+        border-color: #ffd700;
+        outline: none;
+      }
+    }
+  }
+
+  /* Siatka produktów */
+  .shop-grid {
+    display: grid;
+    /* Automatyczne dopasowanie kolumn (responsywność) */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+
+    .shop-card {
+      background-color: rgba(0, 0, 0, 0.6); /* Ciemne półprzezroczyste tło */
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      transition: transform 0.2s, box-shadow 0.2s;
+
+      /* Efekt uniesienia po najechaniu */
+      &:hover {
+        transform: translateY(-5px);
+        border-color: #ffd700;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+      }
+
+      h4 {
+        margin: 10px 0;
+        font-size: 1.1rem;
+        text-align: center;
+      }
+
+      .price {
+        color: #aaa;
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+        font-weight: bold;
+      }
+
+      /* PRZYCISK (KUP / SVG) */
+      .buy-btn {
+        width: 100%;
+        min-height: 40px; /* Stała wysokość, żeby przycisk nie skakał */
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s;
+
+        /* Domyślny styl (Dla "KUP") */
+        background-color: #e67e22; /* Pomarańczowy */
+        color: white;
+
+        &:hover {
+          background-color: #d35400;
+        }
+
+        /* Styl zablokowany (Brak kasy) */
+        &:disabled {
+          background-color: #555;
+          color: #888;
+          cursor: not-allowed;
+          
+          /* Jeśli w środku jest SVG, wyszarzamy je */
+          svg {
+            fill: #888 !important;
+          }
+        }
+
+        /* Styl dla SVG (Ikona w środku) */
+        svg {
+          width: 20px;
+          height: 20px;
+          fill: white; /* Kolor ikony */
+          /* Jeśli to "posiadane", możesz zmienić kolor tła przycisku na zielony */
+        }
+      }
+    }
+  }
+}
+
+
