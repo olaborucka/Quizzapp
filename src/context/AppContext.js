@@ -5,113 +5,145 @@ export const AppContext = createContext();
 
 export const AppProvider = ({children}) => {
 
+    // TO JEST BAZA DANYCH (Ona pamięta wszystko na zawsze, nawet po wylogowaniu)
     const [usersDb, setUsersDb] = useLocalStorage("quizUsersDB", {});
+    
+    // TO JEST SESJA (Kto jest teraz przy klawiaturze)
     const [user, setUser] = useLocalStorage("currentUser", null);
 
-    // Domyślne stany (synchronizowane z userem przy logowaniu)
-    const [inventory, setInventory] = useState(['white']); // Zmienilem na useState, bo i tak ładujemy to z usersDb
+    // --- BRAMKA BEZPIECZEŃSTWA ---
+    // Zapobiega nadpisaniu bazy danych pustymi wartościami po odświeżeniu strony (F5)
+    const [isDataLoaded, setIsDataLoaded] = useState(false);
+
+    // --- STANY TYMCZASOWE (Widoczne na ekranie) ---
+    // ZMIANA: Startujemy z 'default' (Ciemny), a nie 'white'
+    const [points, setPoints] = useState(0);
+    const [inventory, setInventory] = useState(['default']); 
     const [equipped, setEquipped] = useState({ 
-        background: 'white', 
+        background: 'default', // <--- TU BYŁ BŁĄD. Teraz jest 'default'
         character: null 
     });
     
-    const [points, setPoints] = useState(0);
+    // --- 1. ODZYSKIWANIE DANYCH PO ODŚWIEŻENIU (F5) ---
+    useEffect(() => {
+        // Jeśli jest zalogowany użytkownik (w LocalStorage) I mamy go w bazie:
+        if (user && usersDb[user]) {
+            console.log("Przywracam sesję po odświeżeniu dla:", user);
+            
+            // Wczytaj jego punkty i ekwipunek z bazy do widoku
+            setPoints(usersDb[user].points || 0);
+            setInventory(usersDb[user].inventory || ['default']);
+            setEquipped(usersDb[user].equipped || { background: 'default', character: null });
+        }
+        
+        // Otwieramy bramkę - teraz można bezpiecznie zapisywać zmiany
+        setIsDataLoaded(true);
+    }, []); // Pusta tablica = uruchom tylko raz przy starcie aplikacji
 
-    
-    // --- FUNKCJA KUPOWANIA ---
-    // --- POPRAWIONA FUNKCJA KUPOWANIA ---
+
+    // --- FUNKCJE SKLEPU ---
     const buyItem = (item) => {
-        // Zmieniamy item.id na item.item (czyli zapisujemy 'black' a nie '2')
         if (item.price <= points && !inventory.includes(item.item)) {
             setPoints(points - item.price);
             setInventory([...inventory, item.item]); 
-            return true; // Sukces
+            return true;
         }
-        return false; // Porażka
+        return false;
     }
 
-    // --- POPRAWIONA FUNKCJA ZAKŁADANIA ---
     const equipItem = (item) => {
-        // 1. Sprawdzamy czy mamy przedmiot (szukamy nazwy np. 'white')
         if (inventory.includes(item.item)) {
             setEquipped(prev => ({
                 ...prev,
-                // 2. WAŻNE: Używamy 'category' (bo tak nazwałaś to w sklepie), a nie 'type'
                 [item.category]: item.item 
             }));
             return true;
         }
         return false;
     }
+    
+    // --- RESETOWANIE WYGLĄDU (Przycisk w sklepie) ---
     const resetAppearance = () => {
         setEquipped({ 
-            background: 'default', // <--- TERAZ USTAWIA .bg-default
+            background: 'default', // Wraca do ciemnego tła
             character: null 
         });
     }
 
 
-    // --- FUNKCJA LOGOWANIA ---
+    // --- LOGOWANIE I WYLOGOWANIE ---
+
     const handleLogin = (nick) => {
         setUser(nick);
-        
+        // Pozwalamy na zapis, bo użytkownik właśnie wszedł
+        setIsDataLoaded(true); 
+
+        // Jeśli stary gracz - wczytaj go. Jeśli nowy - zostanie na zerach.
         if (usersDb[nick]) {
-            // Wczytaj wszystko z bazy
-            setPoints(usersDb[nick].points || 0);
-            setInventory(usersDb[nick].inventory || ['white']); // POPRAWKA: Wczytaj plecak
-            setEquipped(usersDb[nick].equipped || { background: 'white', character: null }); // POPRAWKA: Wczytaj strój
+            setPoints(usersDb[nick].points);
+            setInventory(usersDb[nick].inventory);
+            setEquipped(usersDb[nick].equipped);
         } else {
-            // Nowy gracz - ustaw domyślne
+            // Reset dla nowego gracza
             setPoints(0);
-            setInventory(['white']);
-            setEquipped({ background: 'white', character: null });
+            setInventory(['default']);
+            setEquipped({ background: 'default', character: null });
         }
     }
 
-    // --- FUNKCJA WYLOGOWANIA ---
     const handleLogout = () => {
+        // 1. Zamykamy bramkę zapisu!
+        // Żeby czyszczenie ekranu (poniżej) nie nadpisało danych w bazie usersDb
+        setIsDataLoaded(false); 
+        
+        // 2. Czyścimy TYLKO to, co widać na ekranie ("wstajemy od komputera")
+        // Dzięki temu kolejny gracz nie zobaczy przez chwilę Twojego tła/punktów.
         setUser(null);
         setPoints(0);
-        setInventory(['white']); // Resetuj po wylogowaniu
-        setEquipped({ background: 'white', character: null });
+        setInventory(['default']); // Reset do domyślnego
+        setEquipped({ background: 'default', character: null }); // Reset do domyślnego
         
+        // Czyścimy pamięć przeglądarki o tym, kto był zalogowany
         localStorage.removeItem("currentUser");
+        
+        // UWAGA: Zauważ, że NIE ruszamy zmiennej `usersDb`. 
+        // Twoje postępy są tam bezpieczne i czekają na ponowne zalogowanie!
     }
 
-    // --- AUTOMATYCZNY ZAPIS ---
+    // --- 2. AUTOMATYCZNY ZAPIS DO BAZY ---
     useEffect(() => {
+        // Jeśli bramka zamknięta (bo dopiero wczytujemy dane lub właśnie wylogowujemy) -> STOP
+        if (!isDataLoaded) return; 
+
         if (user) {
             setUsersDb(prevDb => ({
                 ...prevDb,
                 [user]: { 
                     points: points,
-                    inventory: inventory, // POPRAWKA: Zapisujemy też plecak!
-                    equipped: equipped    // POPRAWKA: Zapisujemy też strój!
+                    inventory: inventory,
+                    equipped: equipped
                 } 
             }));
         }
-    }, [points, inventory, equipped, user]); // Reaguj na zmiany wszystkiego
-
+    }, [points, inventory, equipped, user, isDataLoaded]);
 
     // --- EFEKT WIZUALNY TŁA ---
-    // To sprawi, że tło strony zmieni się od razu po założeniu przedmiotu
     useEffect(() => {
-        // Ustawia klasę np. "bg-black" albo "bg-white" na elemencie <body>
+        // To ustawi klasę np. "bg-default" (Twój ciemny) lub "bg-red"
         document.body.className = `bg-${equipped.background}`;
     }, [equipped.background]);
 
 
-    // POPRAWKA: Musisz udostępnić te rzeczy reszcie aplikacji!
     const contextValue = {
         user,
         points, setPoints,
-        inventory, 
-        equipped,  
-        buyItem,   
-        equipItem, 
+        inventory,
+        equipped,
+        buyItem,
+        equipItem,
+        resetAppearance,
         handleLogin,
-        handleLogout,
-        resetAppearance
+        handleLogout
     };
 
     return (

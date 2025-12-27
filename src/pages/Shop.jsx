@@ -4,6 +4,7 @@ import { AppContext } from '../context/AppContext';
 
 const shopItems = [
     //tła
+    {id: 0, category: 'background', name: 'domyślny', price: 0, item: 'default'},
     {id: 1, category: 'background', name: 'biały', price: 0, item: 'white'},
     {id: 2, category: 'background', name: 'czarny', price: 100, item: 'black'},
     {id: 3, category: 'background', name: 'niebieski', price: 150, item: 'blue'},
@@ -19,16 +20,17 @@ const shopItems = [
     //tryby gry tekstowe
     {id:11, category: 'gameMode-text', name: 'MIX-text', price: 500, item: 'MIX-textMode'}, 
     //postacie
-    {id:12, category: 'character', name: 'Postać 1', price: 250, item: 'character1'},
-    {id:13, category: 'character', name: 'Postać 2', price: 300, item: 'character2'},
-    {id:14, category: 'character', name: 'Postać 3', price: 350, item: 'character3'},
-    {id:15, category: 'character', name: 'Postać 4', price: 400, item: 'character4'},
+    {id:12, category: 'character', name: 'Podstawowa', price: 0, item: 'character0'},
+    {id:13, category: 'character', name: 'Doktor', price: 0, item: 'character1'},
+    {id:14, category: 'character', name: 'Astronauta', price: 300, item: 'character2'},
+    {id:15, category: 'character', name: 'Agent', price: 350, item: 'character3'},
+    {id:16, category: 'character', name: 'Ninja', price: 400, item: 'character4'},
 
 ]
 
 
 function Shop(){
-    const { points, inventory, equipItem, buyItem, setPoints, resetAppearance} = useContext(AppContext);
+    const { points, inventory, equipItem, buyItem, setPoints} = useContext(AppContext);
 
     const [activeCategory, setActiveCategory] = useState('background');
 
@@ -58,10 +60,7 @@ function Shop(){
                 <h3>Sklep</h3>
                 <p>Twoje punkty: <strong>{points}</strong></p>
 
-                {/* ✅ POPRAWKA: Przycisk musi być TUTAJ (raz, na górze) */}
-                <button className="reset-look-btn" onClick={resetAppearance}>
-                    Ustaw tło początkowe 🖌️
-                </button>
+            
             </div>
             
             <div className='shop-categories'>

@@ -1,6 +1,19 @@
 @import './variables';
 @import './mixins';
 
+// LOGIKA TŁA 
+body.bg-default {
+    background-color: $bg-color; 
+    color: $text-color; 
+}
+body.bg-white { background-color: #f5f6fa; color: $black; }
+body.bg-black { background-color: #121212; color: $text-color; }
+body.bg-blue { background-color: #0984e3; color: $white; }
+body.bg-green { background-color: #00b894; color: $white; }
+body.bg-red { background-color: #d63031; color: $white; }
+body.bg-yellow { background-color: #fdcb6e; color: $text-color; }
+
+/* --- GŁÓWNE STYLE --- */
 body {
     margin: 0;
     padding: 0;
@@ -11,7 +24,7 @@ body {
 
 .app {
     max-width: 800px;
-    margin: 0 auto; // Wyśrodkowanie na ekranie
+    margin: 0 auto;
     padding: 20px;
     text-align: center;
 }
@@ -30,7 +43,7 @@ header {
 
     h1 {
         margin: 0;
-        color: $white;
+        color: $white; /* Użycie zmiennej */
         font-size: 1.5rem;
         text-transform: uppercase;
         letter-spacing: 2px;
@@ -47,7 +60,7 @@ header {
         .home-icon {
             width: 30px; 
             height: 30px;
-            fill: $white;
+            fill: $white; /* Użycie zmiennej */
             transition: transform 0.2s, fill 0.2s;
 
             &:hover {
@@ -68,7 +81,7 @@ header {
         .profile-icon {
             width: 25px; 
             height: 25px;
-            fill: white;
+            fill: $white; /* Użycie zmiennej */
             transition: transform 0.2s, fill 0.2s;
 
             &:hover {
@@ -103,13 +116,13 @@ header {
             &:hover {
                 background-color: $accent-color;
                 transform: translateY(-5px);
-                color: $white;
+                color: $white; /* Użycie zmiennej */
             }
         }
     }
 }
-/* --- KONTENER MENU --- */
 
+/* --- KONTENER MENU --- */
 .menu-container {
     max-width: 800px;
     margin: 30px auto;
@@ -117,19 +130,27 @@ header {
     padding: 20px;
 
     h3 {
-        color: white; 
+        color: $white; /* Użycie zmiennej */
         font-size: 1.8rem;
         margin-bottom: 25px;
         text-transform: uppercase;
         letter-spacing: 1px;
     }
-
+    
     .buttons-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Responsywne kafelki */
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
         gap: 15px;
         margin-top: 20px;
-
+      .locked {
+              color: $rose;
+              font-size: 1rem;
+              margin-bottom: 15px;
+              font-weight: bold;
+              border: 1px solid $rose;
+              padding: 10px;
+              border-radius: $border-radius;
+          }
         button {
             padding: 20px;
             font-size: 1.1rem;
@@ -145,7 +166,7 @@ header {
             &:hover {
                 background-color: $accent-color;
                 transform: translateY(-5px);
-                color: $white;
+                color: $white; /* Użycie zmiennej */
             }
             
             &:active {
@@ -166,7 +187,7 @@ header {
     margin-top: 30px;
     margin-bottom: 30px;      
     padding: 20px;
-    background-color: rgba(255, 255, 255, 0.1); 
+    background-color: rgba($white, 0.1); /* Elegancki zapis rgba ze zmienną */
     border-radius: $border-radius;
     gap: 15px;
 
@@ -188,7 +209,7 @@ header {
         padding: 12px 25px;
         font-size: 1rem;
         font-weight: bold;
-        color: $white;
+        color: $white; /* Użycie zmiennej */
         background-color: $primary-color;
         border: none;
         border-radius: $border-radius;
@@ -206,7 +227,7 @@ header {
     }
 }
 
-/* --- PUNKTY i SKLEP (wewnątrz LogBar) --- */
+/* --- PUNKTY i SKLEP --- */
 .points {
     position: absolute; 
     right: 20px;        
@@ -240,7 +261,7 @@ header {
     filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
 }
 
-/* --- STYL EKRANU ŁADOWANIA --- */
+/* --- EKRAN ŁADOWANIA --- */
 .loading-screen {
   display: flex;
   flex-direction: column;
@@ -248,7 +269,7 @@ header {
   align-items: center;
   min-height: 300px;
   font-size: 1.5rem;
-  color: white;
+  color: $white; /* Użycie zmiennej */
 
   p {
     margin-bottom: 20px;
@@ -257,7 +278,7 @@ header {
   .loading-icon {
     width: 50px;
     height: 50px;
-    fill: $rose; /* Zakładam, że masz taką zmienną w _variables, jeśli nie - użyj np. gold */
+    fill: $rose; 
     animation: spin 2s linear infinite;
   }
 }
@@ -268,14 +289,13 @@ header {
 }
 
 /* --- STYLE DLA SAMEJ GRY (Game.jsx) --- */
-/* To jest potrzebne, żeby gra wyglądała ładnie */
 .game-container {
   max-width: 700px;
   margin: 0 auto;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba($white, 0.1); /* Użycie zmiennej w rgba */
   padding: 30px;
   border-radius: 20px;
-  color: white;
+  color: $white; /* Użycie zmiennej */
   text-align: center;
 
   .game-header {
@@ -284,7 +304,7 @@ header {
     margin-bottom: 20px;
     font-weight: bold;
     color: $accent-color;
-    border-bottom: 1px solid rgba(255,255,255,0.2);
+    border-bottom: 1px solid rgba($white, 0.2); /* Użycie zmiennej w rgba */
     padding-bottom: 10px;
   }
 
@@ -295,7 +315,7 @@ header {
       max-width: 100%;
       max-height: 300px;
       border-radius: 10px;
-      border: 3px solid white;
+      border: 3px solid $white; /* Użycie zmiennej */
       object-fit: contain;
     }
   }
@@ -319,63 +339,61 @@ header {
 
       &:hover {
         background-color: $accent-color;
-        color: white;
+        color: $white; /* Użycie zmiennej */
         transform: scale(1.02);
       }
       &.correct {
-        background-color: #2ecc71 !important; /* Zielony */
+        background-color: #2ecc71 !important;
         border-color: #27ae60 !important;
-        color: white !important;
+        color: $white !important; /* Użycie zmiennej */
         transform: scale(1.05);
-    }
+      }
 
-    &.wrong {
-        background-color: #e74c3c !important; /* Czerwony */
+      &.wrong {
+        background-color: #e74c3c !important; 
         border-color: #c0392b !important;
-        color: white !important;
+        color: $white !important; /* Użycie zmiennej */
         opacity: 0.8;
-    }
+      }
 
-    /* Wyłączanie klikania, gdy czekamy na wynik */
-    &:disabled {
+      &:disabled {
         cursor: not-allowed;
         pointer-events: none; 
-    }
+      }
     }
 
     /* Ulepszony ekran końcowy */
     .result-screen {
-    animation: fadeIn 0.5s ease;
-    
-    .score-display {
-        font-size: 4rem;
-        font-weight: bold;
-        color: #ffd700;
-        margin: 20px 0;
-    }
-    
-    .result-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        margin-top: 30px;
-    }
+        animation: fadeIn 0.5s ease;
+        
+        .score-display {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #ffd700;
+            margin: 20px 0;
+        }
+        
+        .result-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
     }
 
     @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
-    
   }
 
-  /* Styl dla ekranu końcowego */
+  /* Styl dla przycisków na ekranie końcowym */
   &.result-screen {
     button {
       margin-top: 20px;
       padding: 15px 30px;
       background-color: $primary-color;
-      color: white;
+      color: $white; /* Użycie zmiennej */
       border: none;
       border-radius: 50px;
       font-size: 1.2rem;
@@ -392,7 +410,7 @@ header {
 @media (max-width: 600px) {
   .menu-container .buttons-grid, 
   .game-container .answers-grid {
-    grid-template-columns: 1fr; /* Jedna kolumna na telefonie */
+    grid-template-columns: 1fr; 
   }
 }
 
@@ -413,7 +431,7 @@ header {
   .profile-icon-large {
     width: 120px;
     height: 120px;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba($white, 0.2); /* Użycie zmiennej */
     border-radius: 50%;
     padding: 20px;
     margin-bottom: 10px;
@@ -421,13 +439,13 @@ header {
     svg {
       width: 100%;
       height: 100%;
-      fill: white;
+      fill: $white; /* Użycie zmiennej */
     }
   }
 
   .profile-details {
     font-size: 1.5rem;
-    color: white;
+    color: $white; /* Użycie zmiennej */
     
     p {
       margin: 10px 0;
@@ -440,7 +458,7 @@ header {
 
   .logout-btn {
     background-color: $rose;
-    color: white;
+    color: $white; /* Użycie zmiennej */
     border: none;
     padding: 15px 40px;
     font-size: 1.2rem;
@@ -463,7 +481,7 @@ header {
   max-width: 900px;
   margin: 0 auto;
   padding: 20px;
-  color: white;
+  color: $white; /* Użycie zmiennej */
 
   /* Nagłówek sklepu */
   .shop-header {
@@ -476,7 +494,7 @@ header {
     h3 {
       font-size: 2.5rem;
       margin: 0 0 10px 0;
-      color: #ffd700; /* Złoty tytuł */
+      color: #ffd700; 
       text-transform: uppercase;
       letter-spacing: 2px;
     }
@@ -486,45 +504,44 @@ header {
       margin: 0;
       
       strong {
-        color: #2ecc71; /* Zielony kolor punktów */
+        color: #2ecc71; 
         font-size: 1.4rem;
       }
     }
-    /* Wewnątrz .shop-container -> .shop-header */
 
+    /* Przycisk Resetowania Wyglądu */
     .reset-look-btn {
-      margin-top: 15px; /* Odstęp od licznika punktów */
-      background-color: rgba(255, 255, 255, 0.05); /* Bardzo delikatne tło */
-      border: 1px solid rgba(255, 255, 255, 0.3); /* Półprzezroczysta biała ramka */
-      color: #dfe6e9; /* Jasny szary tekst */
+      margin-top: 15px; 
+      background-color: rgba($white, 0.05); /* Użycie zmiennej */
+      border: 1px solid rgba($white, 0.3); /* Użycie zmiennej */
+      color: #dfe6e9; 
       padding: 8px 20px;
-      border-radius: 25px; /* Mocno zaokrąglone rogi */
+      border-radius: 25px; 
       cursor: pointer;
       font-size: 0.9rem;
       font-weight: 500;
       letter-spacing: 0.5px;
       transition: all 0.3s ease;
       
-      /* Centrowanie przycisku */
       display: block; 
       margin-left: auto;
       margin-right: auto;
 
       &:hover {
-        background-color: rgba(255, 255, 255, 0.2); /* Jaśniejsze tło po najechaniu */
-        border-color: #ffffff; /* Biała ramka */
-        color: #ffffff; /* Biały tekst */
-        transform: translateY(-2px); /* Lekkie uniesienie */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Cień pod spodem */
+        background-color: rgba($white, 0.2); /* Użycie zmiennej */
+        border-color: $white; /* Użycie zmiennej */
+        color: $white; /* Użycie zmiennej */
+        transform: translateY(-2px); 
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
       }
 
       &:active {
-        transform: translateY(0); /* Efekt wciśnięcia */
+        transform: translateY(0); 
       }
-}
+    }
   }
 
-  /* Menu kategorii (przyciski na górze) */
+  /* Menu kategorii */
   .shop-categories {
     display: flex;
     justify-content: center;
@@ -533,9 +550,9 @@ header {
     margin-bottom: 30px;
 
     button {
-      background-color: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: white;
+      background-color: rgba($white, 0.1); /* Użycie zmiennej */
+      border: 1px solid rgba($white, 0.2); /* Użycie zmiennej */
+      color: $white; /* Użycie zmiennej */
       padding: 10px 20px;
       border-radius: 25px;
       cursor: pointer;
@@ -543,11 +560,10 @@ header {
       transition: all 0.3s ease;
 
       &:hover {
-        background-color: rgba(255, 255, 255, 0.25);
+        background-color: rgba($white, 0.25); /* Użycie zmiennej */
         transform: translateY(-2px);
       }
 
-      /* Opcjonalnie: Styl dla aktywnej kategorii (jeśli dodasz klasę .active w React) */
       &:focus {
         border-color: #ffd700;
         outline: none;
@@ -558,13 +574,12 @@ header {
   /* Siatka produktów */
   .shop-grid {
     display: grid;
-    /* Automatyczne dopasowanie kolumn (responsywność) */
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
 
     .shop-card {
-      background-color: rgba(0, 0, 0, 0.6); /* Ciemne półprzezroczyste tło */
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: rgba(0, 0, 0, 0.6); 
+      border: 1px solid rgba($white, 0.1); /* Użycie zmiennej */
       border-radius: 15px;
       padding: 20px;
       display: flex;
@@ -573,7 +588,6 @@ header {
       justify-content: space-between;
       transition: transform 0.2s, box-shadow 0.2s;
 
-      /* Efekt uniesienia po najechaniu */
       &:hover {
         transform: translateY(-5px);
         border-color: #ffd700;
@@ -596,7 +610,7 @@ header {
       /* PRZYCISK (KUP / SVG) */
       .buy-btn {
         width: 100%;
-        min-height: 40px; /* Stała wysokość, żeby przycisk nie skakał */
+        min-height: 40px; 
         border: none;
         border-radius: 8px;
         font-weight: bold;
@@ -606,36 +620,29 @@ header {
         justify-content: center;
         transition: background-color 0.3s;
 
-        /* Domyślny styl (Dla "KUP") */
-        background-color: #e67e22; /* Pomarańczowy */
-        color: white;
+        background-color: #e67e22; 
+        color: $white; /* Użycie zmiennej */
 
         &:hover {
           background-color: #d35400;
         }
 
-        /* Styl zablokowany (Brak kasy) */
         &:disabled {
           background-color: #555;
           color: #888;
           cursor: not-allowed;
           
-          /* Jeśli w środku jest SVG, wyszarzamy je */
           svg {
             fill: #888 !important;
           }
         }
 
-        /* Styl dla SVG (Ikona w środku) */
         svg {
           width: 20px;
           height: 20px;
-          fill: white; /* Kolor ikony */
-          /* Jeśli to "posiadane", możesz zmienić kolor tła przycisku na zielony */
+          fill: $white; /* Użycie zmiennej */
         }
       }
     }
   }
 }
-
-
