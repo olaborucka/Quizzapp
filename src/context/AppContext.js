@@ -5,59 +5,159 @@ export const AppContext = createContext();
 
 export const AppProvider = ({children}) => {
 
-    // 1. To jest Twoja "Baza Danych" wszystkich graczy.
-    // Trzymamy tu obiekt w stylu: { "Ola": 100, "Marek": 20 }
+    // TO JEST BAZA DANYCH (Ona pamięta wszystko na zawsze, nawet po wylogowaniu)
     const [usersDb, setUsersDb] = useLocalStorage("quizUsersDB", {});
-
-    // 2. To jest aktualna sesja (kto jest zalogowany teraz)
-    const [user, setUser] = useLocalStorage("currentUser", null);
     
-    // 3. Punkty w aktualnej grze (trzymamy w zwykłym useState, bo synchronizujemy je z bazą poniżej)
-    const [points, setPoints] = useState(0);
+    // TO JEST SESJA (Kto jest teraz przy klawiaturze)
+    const [user, setUser] = useLocalStorage("currentUser", null);
 
-    // --- FUNKCJA LOGOWANIA ---
+    // --- BRAMKA BEZPIECZEŃSTWA ---
+    // Zapobiega nadpisaniu bazy danych pustymi wartościami po odświeżeniu strony (F5)
+    const [isDataLoaded, setIsDataLoaded] = useState(false);
+
+    // --- STANY TYMCZASOWE (Widoczne na ekranie) ---
+    // ZMIANA: Startujemy z 'default' (Ciemny), a nie 'white'
+    const [points, setPoints] = useState(0);
+    const [inventory, setInventory] = useState(['default']); 
+    const [equipped, setEquipped] = useState({ 
+        background: 'default', // <--- TU BYŁ BŁĄD. Teraz jest 'default'
+        character: null 
+    });
+    
+    // --- 1. ODZYSKIWANIE DANYCH PO ODŚWIEŻENIU (F5) ---
+    useEffect(() => {
+        // Jeśli jest zalogowany użytkownik (w LocalStorage) I mamy go w bazie:
+        if (user && usersDb[user]) {
+            console.log("Przywracam sesję po odświeżeniu dla:", user);
+            
+            // Wczytaj jego punkty i ekwipunek z bazy do widoku
+            setPoints(usersDb[user].points || 0);
+            setInventory(usersDb[user].inventory || ['default']);
+            setEquipped(usersDb[user].equipped || { background: 'default', character: null });
+        }
+        
+        // Otwieramy bramkę - teraz można bezpiecznie zapisywać zmiany
+        setIsDataLoaded(true);
+    }, []); // Pusta tablica = uruchom tylko raz przy starcie aplikacji
+
+
+    // --- FUNKCJE SKLEPU ---
+    const buyItem = (item) => {
+        if (item.price <= points && !inventory.includes(item.item)) {
+            setPoints(points - item.price);
+            setInventory([...inventory, item.item]); 
+            return true;
+        }
+        return false;
+    }
+
+    const equipItem = (item) => {
+        if (inventory.includes(item.item)) {
+            setEquipped(prev => ({
+                ...prev,
+                [item.category]: item.item 
+            }));
+            return true;
+        }
+        return false;
+    }
+    
+    // --- RESETOWANIE WYGLĄDU (Przycisk w sklepie) ---
+    const resetAppearance = () => {
+        setEquipped({ 
+            background: 'default', // Wraca do ciemnego tła
+            character: null 
+        });
+    }
+
+
+    // --- LOGOWANIE I WYLOGOWANIE ---
+
     const handleLogin = (nick) => {
         setUser(nick);
-        
-        // Sprawdzamy, czy ten nick już grał
+        // Pozwalamy na zapis, bo użytkownik właśnie wszedł
+        setIsDataLoaded(true); 
+
+        // Jeśli stary gracz - wczytaj go. Jeśli nowy - zostanie na zerach.
         if (usersDb[nick]) {
-            // Jeśli tak, wczytaj jego punkty z bazy
-            setPoints(usersDb[nick]);
+            setPoints(usersDb[nick].points);
+            setInventory(usersDb[nick].inventory);
+            setEquipped(usersDb[nick].equipped);
         } else {
-            // Jeśli to nowy gracz, ustaw 0
+            // Reset dla nowego gracza
             setPoints(0);
+            setInventory(['default']);
+            setEquipped({ background: 'default', character: null });
         }
     }
 
-    // --- FUNKCJA WYLOGOWANIA ---
     const handleLogout = () => {
-        // Tylko czyścimy sesję ("wstajemy od komputera")
+        // 1. Zamykamy bramkę zapisu!
+        // Żeby czyszczenie ekranu (poniżej) nie nadpisało danych w bazie usersDb
+        setIsDataLoaded(false); 
+        
+        // 2. Czyścimy TYLKO to, co widać na ekranie ("wstajemy od komputera")
+        // Dzięki temu kolejny gracz nie zobaczy przez chwilę Twojego tła/punktów.
         setUser(null);
         setPoints(0);
+        setInventory(['default']); // Reset do domyślnego
+        setEquipped({ background: 'default', character: null }); // Reset do domyślnego
         
-        // WAŻNE: Usuwamy tylko informację KTO jest zalogowany, 
-        // ale NIE KASUJEMY bazy danych (usersDb)!
+        // Czyścimy pamięć przeglądarki o tym, kto był zalogowany
         localStorage.removeItem("currentUser");
+        
+        // UWAGA: Zauważ, że NIE ruszamy zmiennej `usersDb`. 
+        // Twoje postępy są tam bezpieczne i czekają na ponowne zalogowanie!
     }
 
-    // --- AUTOMATYCZNY ZAPIS ---
-    // Ten efekt uruchamia się za każdym razem, gdy zmienią się punkty.
-    // Jeśli ktoś jest zalogowany, aktualizujemy jego wynik w "Bazie Danych".
+
+
+    // --- 2. AUTOMATYCZNY ZAPIS DO BAZY ---
     useEffect(() => {
+        // Jeśli bramka zamknięta (bo dopiero wczytujemy dane lub właśnie wylogowujemy) -> STOP
+        if (!isDataLoaded) return; 
+
         if (user) {
             setUsersDb(prevDb => ({
-                ...prevDb,      // Zachowaj innych graczy
-                [user]: points  // Zaktualizuj tylko obecnego gracza
+                ...prevDb,
+                [user]: { 
+                    points: points,
+                    inventory: inventory,
+                    equipped: equipped
+                } 
             }));
         }
-    }, [points, user]); // Reaguj na zmiany punktów i użytkownika
+    }, [points, inventory, equipped, user, isDataLoaded]);
+
+    // --- EFEKT WIZUALNY TŁA ---
+    useEffect(() => {
+        // To ustawi klasę np. "bg-default" (Twój ciemny) lub "bg-red"
+        document.body.className = `bg-${equipped.background}`;
+    }, [equipped.background]);
+
+
+    const consumeItem = (itemId) => {
+        if (inventory.includes(itemId)) {
+            const copy = [...inventory];
+            const index = copy.indexOf(itemId);
+            copy.splice(index, 1);
+            setInventory(copy);
+            return true;
+        }
+        return false;
+    }
 
     const contextValue = {
         user,
-        points,
-        setPoints,
+        points, setPoints,
+        inventory,
+        equipped,
+        buyItem,
+        equipItem,
+        resetAppearance,
         handleLogin,
-        handleLogout
+        handleLogout,
+        consumeItem
     };
 
     return (

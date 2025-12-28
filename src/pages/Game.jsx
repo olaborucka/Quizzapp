@@ -2,9 +2,10 @@ import { useState, useEffect, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
 import { questions } from '../data/data'; 
+import LifelinesPanel from '../components/game/LifelinesPanel';
 
 function Game() {
-    const { setPoints } = useContext(AppContext);
+    const { points, setPoints, inventory, consumeItem} = useContext(AppContext);
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -15,6 +16,7 @@ function Game() {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); 
     const [score, setScore] = useState(0);                              
     const [isGameOver, setIsGameOver] = useState(false);
+    const [hiddenAnswers, setHiddenAnswers] = useState([]);
 
     // NOWOŚĆ: Stany do obsługi kolorów i blokady klikania
     const [selectedAnswer, setSelectedAnswer] = useState(null); // Co kliknął gracz?
@@ -35,6 +37,10 @@ function Game() {
             setGameQuestions(filteredQuestions);
         }
     }, [type, category, navigate]);
+
+    useEffect(() => {
+        setHiddenAnswers([]); // Reset ukrytych odpowiedzi przy zmianie pytania
+    }, [currentQuestionIndex]);
 
     // --- LOGIKA KLIKNIĘCIA (Z OPÓŹNIENIEM) ---
     const handleAnswerClick = (answer) => {
@@ -93,6 +99,82 @@ function Game() {
 
         return className;
     };
+    // koła ratunkowe 
+    const LIFELINE_PRICES = {
+        fiftyFifty: 300,
+        askFriend: 400,
+        oneWrong: 100,
+    };
+
+    const handleLifeline = (type) => {
+        if (isProcessing) return;
+
+        if ((type === 'fiftyFifty' || type === 'oneWrong') && hiddenAnswers.length > 0) {
+            return; // Już użyto tego koła
+        }
+
+        // sprawdzanie stanu 
+        const hasItem = inventory.includes(type);
+        const price = LIFELINE_PRICES[type];
+        if (!hasItem) {
+            if (points >= price) {
+                const confirm = window.confirm(`Nie posiadasz tego koła ratunkowego. Czy chcesz je kupić za ${price} punktów?`);
+                if (confirm) {
+                    setPoints(prev => prev - price);
+                } else {
+                    return;
+                }
+            } else {
+                alert("Nie masz wystarczająco punktów na zakup tego koła ratunkowego.");
+                return;
+            }
+        
+        }else {
+            consumeItem(type);
+        }
+
+        // efekty kół
+        const currentQuestion = gameQuestions[currentQuestionIndex];
+        const correctIndex = currentQuestion.answers.findIndex(ans => ans === currentQuestion.correctAnswer);
+
+        // indexy blednych odpowiedzi
+        let wrongIndexes = [];
+        currentQuestion.answers.forEach((_ , index) => {
+            if (index !== correctIndex) {
+                wrongIndexes.push(index);
+            }
+        });
+        
+
+        // logika kół
+        switch(type) {
+            case 'fiftyFifty':
+                wrongIndexes = wrongIndexes.sort(() => Math.random()- 0.5) ;
+                setHiddenAnswers(wrongIndexes.slice(0, 2));
+                break;
+
+            case 'oneWrong':
+                wrongIndexes = wrongIndexes.sort(() => Math.random()- 0.5) ;
+                setHiddenAnswers([wrongIndexes[0]]);
+                break;
+            case 'askFriend':
+                const isFriendSmart = Math.random() > 0.2; 
+
+                let suggestion;
+                if (isFriendSmart) {
+                    suggestion = currentQuestion.correctAnswer;
+                } else {
+                    const randomWrongIndex = wrongIndexes[Math.floor(Math.random() * wrongIndexes.length)];
+                    suggestion = currentQuestion.answers[randomWrongIndex];
+                }
+                alert(`Twój przyjaciel sugeruje odpowiedź: "${suggestion}"`);
+                break;
+
+            default:
+                break;
+        }
+    }
+
 
 
     // --- RENDER 1: ŁADOWANIE ---
@@ -137,6 +219,7 @@ function Game() {
     }
 
     const currentQuestion = gameQuestions[currentQuestionIndex];
+    
 
     // --- RENDER 3: GRA WŁAŚCIWA ---
     return(
@@ -159,19 +242,31 @@ function Game() {
             <div className='question-text'>
                 <h2>{currentQuestion.question}</h2>
             </div>
+            <LifelinesPanel 
+                inventory={inventory} 
+                onUseLifeline={handleLifeline}
+                isDisabled={isProcessing}
+                hiddenAnswers={hiddenAnswers}
+            />
             
             <div className='answers-grid'>
-                {currentQuestion.answers.map((answer, index) => (
-                    <button 
-                        key={index} 
-                        // TU UŻYWAMY NOWEJ FUNKCJI DO KLAS:
-                        className={getButtonClass(answer)}
-                        onClick={() => handleAnswerClick(answer)}
-                        disabled={isProcessing} // Zablokuj klikanie jak czekamy
-                    >
-                        {answer}
-                    </button>
-                ))}
+                {currentQuestion.answers.map((answer, index) => {
+                
+                    const isHidden = hiddenAnswers.includes(index);
+
+                    return (
+                        <button 
+                            key={index} 
+                            className={getButtonClass(answer)}
+                            onClick={() => handleAnswerClick(answer)}
+                            disabled={isProcessing}
+                            // Dzięki temu ukrywamy odpowiedź:
+                            style={{ visibility: isHidden ? 'hidden' : 'visible' }}
+                        >
+                            {answer}
+                        </button>
+                    );
+                })}
             </div>
         </div>
     )

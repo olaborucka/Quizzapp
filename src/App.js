@@ -12,6 +12,7 @@ import Game from './pages/Game.jsx';
 import Profile from './pages/Profile.jsx'
 
 
+
 function App() {
     const { user } = useContext(AppContext)
     return (
