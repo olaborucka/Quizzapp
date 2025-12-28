@@ -110,6 +110,8 @@ export const AppProvider = ({children}) => {
         // Twoje postępy są tam bezpieczne i czekają na ponowne zalogowanie!
     }
 
+
+
     // --- 2. AUTOMATYCZNY ZAPIS DO BAZY ---
     useEffect(() => {
         // Jeśli bramka zamknięta (bo dopiero wczytujemy dane lub właśnie wylogowujemy) -> STOP
@@ -134,6 +136,17 @@ export const AppProvider = ({children}) => {
     }, [equipped.background]);
 
 
+    const consumeItem = (itemId) => {
+        if (inventory.includes(itemId)) {
+            const copy = [...inventory];
+            const index = copy.indexOf(itemId);
+            copy.splice(index, 1);
+            setInventory(copy);
+            return true;
+        }
+        return false;
+    }
+
     const contextValue = {
         user,
         points, setPoints,
@@ -143,7 +156,8 @@ export const AppProvider = ({children}) => {
         equipItem,
         resetAppearance,
         handleLogin,
-        handleLogout
+        handleLogout,
+        consumeItem
     };
 
     return (
