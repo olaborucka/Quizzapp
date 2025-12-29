@@ -646,3 +646,64 @@ header {
     }
   }
 }
+
+//leaderboard
+
+/* --- Style dla Tabeli Wyników --- */
+.leaderboard-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+  color: white; /* Ważne, żeby tekst był biały na ciemnym tle! */
+}
+
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: rgba(0, 0, 0, 0.3); /* Lekko przyciemnione tło tabeli */
+}
+
+.leaderboard-table th, 
+.leaderboard-table td {
+  border: 1px solid #555;
+  padding: 12px;
+  text-align: center;
+}
+
+.leaderboard-table th {
+  background-color: #e67e22; /* Pomarańczowy nagłówek */
+  color: white;
+  font-weight: bold;
+}
+
+.leaderboard-table tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.05); /* Paski co drugi wiersz */
+}
+
+/* Przyciski filtrów */
+.filter-buttons {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  border-radius: $border-radius;
+  button{
+    border-radius: $border-radius;
+    background-color: $secondary-color;
+    padding: 10px;  
+    &:hover{
+    background-color: $accent-color;
+    }
+    &.active-filter {
+      background-color: $primary-color;
+      border-color: $primary-color;
+      &:hover{
+      background-color: $accent-color;
+      }
+    }
+  
+  }
+}
+

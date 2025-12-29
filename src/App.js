@@ -10,6 +10,7 @@ import TextGame from './components/game/text.jsx';
 import Shop from './pages/Shop.jsx';
 import Game from './pages/Game.jsx';      
 import Profile from './pages/Profile.jsx'
+import Leaderboard from './pages/Leaderboard.jsx';
 
 
 
@@ -50,7 +51,10 @@ function App() {
                         path="/profile"
                         element={user ? <Profile /> : <p>Zaloguj się</p>}
                     />
-
+                    <Route 
+                        path="/leaderboard"
+                        element={user ? <Leaderboard /> : <p>Zaloguj się</p>}
+                    />
                 </Routes>
             </div>
         </Router>

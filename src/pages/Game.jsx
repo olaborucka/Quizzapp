@@ -5,7 +5,7 @@ import { questions } from '../data/data';
 import LifelinesPanel from '../components/game/LifelinesPanel';
 
 function Game() {
-    const { points, setPoints, inventory, consumeItem} = useContext(AppContext);
+    const { points, setPoints, inventory, consumeItem, saveScore} = useContext(AppContext);
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -41,6 +41,20 @@ function Game() {
     useEffect(() => {
         setHiddenAnswers([]); // Reset ukrytych odpowiedzi przy zmianie pytania
     }, [currentQuestionIndex]);
+
+    useEffect(() => {
+        if (isGameOver) {
+            const newResult = {
+            score: score,
+            points: score * 10,
+            category: category,
+            type:type,
+            date: new Date().toLocaleDateString(),
+        };
+        saveScore(newResult);
+        }
+        
+    }, [isGameOver]);
 
     // --- LOGIKA KLIKNIĘCIA (Z OPÓŹNIENIEM) ---
     const handleAnswerClick = (answer) => {
@@ -214,6 +228,7 @@ function Game() {
                     {/* Przeładowanie strony resetuje grę */}
                     <button onClick={() => window.location.reload()}>Zagraj ponownie</button>
                 </div>
+                <button onClick={() => navigate('/leaderboard')}>🏆 Zobacz Wyniki</button>
             </div>
         );
     }

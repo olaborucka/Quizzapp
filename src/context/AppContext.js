@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import useLocalStorage from "../hooks/useLocalStorage"; 
+import { result } from "lodash";
 
 export const AppContext = createContext();
 
@@ -15,6 +16,7 @@ export const AppProvider = ({children}) => {
     // Zapobiega nadpisaniu bazy danych pustymi wartościami po odświeżeniu strony (F5)
     const [isDataLoaded, setIsDataLoaded] = useState(false);
 
+    const [highScores, setHighScores] = useLocalStorage("highScores", []);
     // --- STANY TYMCZASOWE (Widoczne na ekranie) ---
     // ZMIANA: Startujemy z 'default' (Ciemny), a nie 'white'
     const [points, setPoints] = useState(0);
@@ -60,6 +62,17 @@ export const AppProvider = ({children}) => {
             return true;
         }
         return false;
+    }
+
+    // ranking
+    const saveScore = (result) => {
+        const newEntry = { 
+            user: user, 
+            ...result 
+        };
+        const updatedScores = [...highScores, newEntry];
+        updatedScores.sort((a, b) => b.points - a.points);
+        setHighScores(updatedScores.slice(0, 50));
     }
     
     // --- RESETOWANIE WYGLĄDU (Przycisk w sklepie) ---
@@ -157,7 +170,9 @@ export const AppProvider = ({children}) => {
         resetAppearance,
         handleLogin,
         handleLogout,
-        consumeItem
+        consumeItem,
+        saveScore,
+        highScores
     };
 
     return (
