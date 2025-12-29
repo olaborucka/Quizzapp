@@ -14,7 +14,7 @@ const shopItems = [
     //koła ratunkowe
     {id: 7, category: 'lifeline', name: '50/50', price: 300, item: 'fiftyFifty'},
     {id: 8, category: 'lifeline', name: 'pytanie do przyjaciela', price: 400, item: 'askFriend'},
-    {id:9, category: 'lifeline', name: 'eliminacja 1 niepoprawnej odpowiedzi', price: 0, item: 'oneWrong'},
+    {id:9, category: 'lifeline', name: 'eliminacja 1 niepoprawnej odpowiedzi', price: 100, item: 'oneWrong'},
     //tryby gry wizualne
     {id:10, category: 'gameMode-visual', name: 'MIX-pic', price: 500, item: 'MIX-visualMode'},
     //tryby gry tekstowe
