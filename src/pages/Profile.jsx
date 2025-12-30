@@ -60,7 +60,7 @@ const getCharacterIcon = (characterId) => {
 
 
 function Profile() {
-    const { user, points, handleLogout, equipped } = useContext(AppContext);
+    const { user, points, handleLogout, equipped, achievements } = useContext(AppContext);
     const navigate = useNavigate();
 
     const onLogoutClick = () => {
@@ -74,9 +74,26 @@ function Profile() {
             <div className="profile-icon-large">
                 {getCharacterIcon(equipped.character)}
             </div>
-            <div className="profile-details">
-                <p>Nick: <strong>{user}</strong></p>
-                <p>Punkty: <strong>{points}</strong></p>
+            <div className="badges-section">
+                <h4>Twoje Odznaki ({achievements.length}) 🏆</h4>
+                
+                {achievements.length === 0 ? (
+                    <div className="empty-badges">
+                        <p>
+                            Jeszcze nic nie zdobyłeś. <br/>
+                            Zagraj w grę, aby zdobyć pierwszą odznakę!
+                        </p>
+                    </div>
+                ) : (
+                    <div className="badges-grid">
+                        {achievements.map(badge => (
+                            <div key={badge.id} className="badge-card">
+                                <div className="badge-icon">🏆</div>
+                                <div className="badge-name">{badge.name}</div>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
 
             <button className="logout-btn" onClick={onLogoutClick}>

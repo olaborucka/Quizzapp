@@ -26,6 +26,23 @@ export const AppProvider = ({children}) => {
         character: null 
     });
 
+    const [ gamesPlayed, setGamesPlayed ] = useLocalStorage("gamesPlayed" , 0)
+    const [ achievements, setAchievements ] = useState([])
+    const BADGES = [
+        { id:1, name: "Początkujący", condition: (pts, games) => games >= 1},
+        { id:2, name: "Średniozaawandowany", condition: (pts, games) => games >= 10},
+        { id:3, name: "Ekspert", condition: (pts, games) => games >= 30},
+        { id:4, name: "Weteran", condition: (pts, games) => games >= 100},
+
+        { id:5, name: "Bogacz", condition: (pts, games) => pts >= 1000},
+        { id:6, name: "Elon Musk", condition: (pts, games) => pts >= 3000},
+
+        { id:7, name: "Tygrys", condition: (pts, games) => pts >= 800 && games >= 20},
+    ]
+
+    
+
+
     const [customQuestions, setCustomQuestions] = useLocalStorage("customQuestions", [])
     const allQuestions = [...defaultQuestions, ...customQuestions]
     const addQuestion = (newQ) => {
@@ -49,6 +66,15 @@ export const AppProvider = ({children}) => {
         setIsDataLoaded(true);
     }, []); // Pusta tablica = uruchom tylko raz przy starcie aplikacji
 
+    useEffect(() => {
+        const unlocked = BADGES.filter(badge => badge.condition(points, gamesPlayed))
+        setAchievements(unlocked)
+        
+    }, [points, gamesPlayed])
+
+    const incrementGamesPlayed = () => {
+        setGamesPlayed(prev => prev + 1)
+    }
 
     // --- FUNKCJE SKLEPU ---
     const buyItem = (item) => {
@@ -182,7 +208,9 @@ export const AppProvider = ({children}) => {
         saveScore,
         highScores,
         allQuestions,
-        addQuestion
+        addQuestion,
+        achievements,
+        incrementGamesPlayed
     };
 
     return (
