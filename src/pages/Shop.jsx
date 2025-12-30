@@ -15,6 +15,7 @@ const shopItems = [
     {id: 7, category: 'lifeline', name: '50/50', price: 300, item: 'fiftyFifty'},
     {id: 8, category: 'lifeline', name: 'pytanie do przyjaciela', price: 400, item: 'askFriend'},
     {id:9, category: 'lifeline', name: 'eliminacja 1 niepoprawnej odpowiedzi', price: 100, item: 'oneWrong'},
+    {id:17, category: 'lifeline', name: 'odkryj', price: 200, item: 'reveal' },
     //tryby gry wizualne
     {id:10, category: 'gameMode-visual', name: 'MIX-pic', price: 500, item: 'MIX-visualMode'},
     //tryby gry tekstowe

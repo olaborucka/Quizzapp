@@ -93,35 +93,66 @@ header {
 }
 
 
-/* --- MENU GŁÓWNE (GameModes.jsx) --- */
+/* --- NOWOCZESNE MENU GŁÓWNE --- */
 .game-menu {
     list-style: none;
     padding: 0;
+    
+    // Flexbox: Wyśrodkowanie i zawijanie na małych ekranach
     display: flex;
     justify-content: center;
+    flex-wrap: wrap; 
     gap: 20px;
-    margin-top: 20px;
+    margin-top: 40px;
+    margin-bottom: 40px;
 
     li {
         a {
-            display: block;
+            display: flex;
+            align-items: center; // Wyrównanie ikony z tekstem
+            gap: 12px;           // Odstęp między ikoną a tekstem
+            
             background-color: $secondary-color;
-            color: $bg-color;
+            color: $white; 
             text-decoration: none;
+            
             padding: 15px 30px;
-            border-radius: $border-radius;
+            border-radius: 50px; // Mocno zaokrąglone rogi (styl "pill")
+            border: 2px solid transparent; // Miejsce na ramkę przy hover
+            
+            font-size: 1.1rem;
             font-weight: bold;
-            transition: 0.3s;
+            letter-spacing: 0.5px;
+            
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 
+            // Styl dla ikon wewnątrz przycisku
+            svg {
+                transition: transform 0.3s ease;
+                filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
+            }
+
+            // --- EFEKT NAJECHANIA MYSZKĄ (HOVER) ---
             &:hover {
                 background-color: $accent-color;
-                transform: translateY(-5px);
-                color: $white; /* Użycie zmiennej */
+                transform: translateY(-5px) scale(1.05); // Uniesienie i powiększenie
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); // Większy cień
+                border-color: rgba(255, 255, 255, 0.2);
+
+                // Animacja ikony przy najechaniu
+                svg {
+                    transform: rotate(10deg) scale(1.2);
+                }
+            }
+
+            // Efekt kliknięcia
+            &:active {
+                transform: translateY(-2px) scale(0.98);
             }
         }
     }
 }
-
 /* --- KONTENER MENU --- */
 .menu-container {
     max-width: 800px;
@@ -317,6 +348,33 @@ header {
       border-radius: 10px;
       border: 3px solid $white; /* Użycie zmiennej */
       object-fit: contain;
+    }
+    /* Efekt zamazania dla trybu wizualnego */
+    .visual-img {
+        transition: filter 0.5s ease; /* Płynne odsłanianie */
+        
+        &.blurred {
+            filter: blur(8px); /* Mocne rozmycie */
+            cursor: help;
+        }
+    }
+
+    /* Styl dla timera */
+    .timer-display {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #e74c3c; /* Czerwony kolor */
+        margin-bottom: 10px;
+        
+        &.low-time {
+            animation: pulse 0.5s infinite;
+        }
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
     }
   }
 
@@ -707,3 +765,31 @@ header {
   }
 }
 
+// timer 
+/* --- STYL TIMERA --- */
+.timer-display {
+    font-size: 1.8rem;      /* Duża czcionka */
+    font-weight: 800;       /* Gruby tekst */
+    color: #e74c3c;         /* Czerwony kolor */
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.5); /* Cień dla lepszej czytelności */
+    min-width: 80px;        /* Żeby nie skakał */
+    
+    &.low-time {
+        color: #ff0000;
+        animation: pulse 0.5s infinite; /* Pulsowanie gdy mało czasu */
+    }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* --- STYL DLA ZAMAZANEGO OBRAZKA --- */
+.visual-img {
+    transition: filter 0.5s ease;
+    &.blurred {
+        filter: blur(15px); /* To robi robotę! */
+    }
+}
