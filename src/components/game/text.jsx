@@ -26,7 +26,7 @@ function TextGame(){
                 {isMixUnlocked ? <button onClick={() => startGame('MIX')}>MIX</button> : <p className='locked'>tryb mix zablokowany</p>}
                 <button onClick={() => startGame('Informatyka')}>Informatyka</button>
                 <button onClick={() => startGame('Geografia')}>Geografia</button>
-                <button onClick={() => startGame('Histotia')}>Historia</button>
+                <button onClick={() => startGame('Historia')}>Historia</button>
                 <button onClick={() => startGame('Nauka')}>Nauka</button>
                 <button onClick={() => startGame('Kultura')}>Kultura</button> 
             </div>

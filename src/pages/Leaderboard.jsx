@@ -1,15 +1,17 @@
 import { useContext, useState } from "react";
 import { AppContext } from "../context/AppContext";
+import { useMemo } from "react";
 
 
 function Leaderboard() {
     const { highScores } = useContext(AppContext);
     const [filter, setFilter] = useState('ALL');
 
-    const filteredScores = highScores.filter(entry => {
-        if (filter === "ALL") return true
-        return entry.category === filter
-    })
+    const filteredScores = useMemo(() => {
+        return highScores
+            .filter(entry => filter === 'ALL' ? true : entry.category === filter)
+            .sort((a,b) => b.points - a.points)
+    }, [highScores, filter])
     const allCategories = highScores.map(entry => entry.category);
     const uniqueCategories = ['ALL', ...new Set(allCategories)];
 
