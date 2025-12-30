@@ -51,6 +51,23 @@ function GameModes(){
                        Kreator Pytań
                     </Link>
                 </li>
+                <li style={{ marginTop: '20px' }}>
+                    <button 
+                        onClick={() => {
+                            // Generuje link np. http://localhost:3000/challenge?type=visual
+                            const link = `${window.location.origin}/challenge?type=visual&category=MIX`;
+                            navigator.clipboard.writeText(link);
+                            alert("Skopiowano link do wyzwania! Wyślij go znajomemu.");
+                        }}
+                        style={{
+                            padding: '15px 30px', borderRadius: '50px', border: 'none',
+                            background: '#6c5ce7', color: 'white', fontWeight: 'bold', cursor: 'pointer',
+                            width: '100%', display: 'flex', gap: '10px', alignItems: 'center', justifyContent: 'center'
+                        }}
+                    >
+                        🔗 Udostępnij Wyzwanie
+                    </button>
+                </li>
             </ul>
         </nav>
     )

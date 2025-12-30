@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import useLocalStorage from "../hooks/useLocalStorage"; 
-import { questions as defaultQuestions } from "../data/data";
+import { questions as defaultQuestions } from "../data/data"; // ✅ 1. Importujemy dane bezpośrednio
 
 export const AppContext = createContext();
 
@@ -11,8 +11,10 @@ export const AppProvider = ({children}) => {
     const [isDataLoaded, setIsDataLoaded] = useState(false);
     const [highScores, setHighScores] = useLocalStorage("highScores", []);
     
-    // --- PYTANIA UŻYTKOWNIKA ---
+    // --- PYTANIA ---
     const [customQuestions, setCustomQuestions] = useLocalStorage("customQuestions", []);
+    
+    // ✅ 2. Łączymy zaimportowane pytania z własnymi (To zawsze działa)
     const allQuestions = [...defaultQuestions, ...customQuestions];
 
     const addQuestion = (newQ) => {
@@ -20,12 +22,10 @@ export const AppProvider = ({children}) => {
         setCustomQuestions([...customQuestions, questionWithId]);
     };
 
-    // --- STANY GRACZA (Teraz gamesPlayed jest tutaj, a nie w osobnym localStorage) ---
+    // --- STANY GRACZA ---
     const [points, setPoints] = useState(0);
     const [inventory, setInventory] = useState(['default']); 
     const [equipped, setEquipped] = useState({ background: 'default', character: null });
-    
-    // 🔧 POPRAWKA: Zmieniliśmy to na zwykły useState, żeby nie było wspólne dla wszystkich
     const [gamesPlayed, setGamesPlayed] = useState(0); 
     const [achievements, setAchievements] = useState([]); 
 
@@ -35,84 +35,67 @@ export const AppProvider = ({children}) => {
         { id: 3, name: "Ekspert",           condition: (pts, games) => games >= 30 },
         { id: 4, name: "Weteran",           condition: (pts, games) => games >= 100 },
         { id: 5, name: "Bogacz",            condition: (pts, games) => pts >= 1000 },
-        { id: 6, name: "Elon Musk",         condition: (pts, games) => pts >= 10000 },
+        { id: 6, name: "Elon Musk",         condition: (pts, games) => pts >= 3000 },
         { id: 7, name: "Tygrys",            condition: (pts, games) => pts >= 800 && games >= 20 },
     ];
 
-    // --- AUTOMAT ODZNAK (Poprawiona logika) ---
+    // Automat odznak
     useEffect(() => {
-        // Filtrujemy odznaki, biorąc pod uwagę aktualne punkty i gry
         const unlocked = BADGES.filter(badge => badge.condition(points, gamesPlayed));
         setAchievements(unlocked);
     }, [points, gamesPlayed]);
 
-    // 🔧 POPRAWKA: Poprawna składnia funkcji
     const incrementGamesPlayed = () => {
         setGamesPlayed(prev => prev + 1);
     };
 
-    // --- LOGOWANIE I WCZYTYWANIE DANYCH ---
+    // --- LOGIKA LOGOWANIA I ZAPISU (Bez zmian) ---
     const handleLogin = (nick) => {
         setUser(nick);
         setIsDataLoaded(true); 
-
         if (usersDb[nick]) {
-            // Wczytujemy dane konkretnego użytkownika
             setPoints(usersDb[nick].points || 0);
             setInventory(usersDb[nick].inventory || ['default']);
             setEquipped(usersDb[nick].equipped || { background: 'default', character: null });
-            // 🔧 Wczytujemy jego liczbę gier (lub 0 jeśli nie ma)
             setGamesPlayed(usersDb[nick].gamesPlayed || 0);
         } else {
-            // Nowy użytkownik - wszystko na start
             setPoints(0);
             setInventory(['default']);
             setEquipped({ background: 'default', character: null });
-            setGamesPlayed(0); // 🔧 Startuje z 0 gier
+            setGamesPlayed(0);
         }
     }
 
     const handleLogout = () => {
         setIsDataLoaded(false); 
-        
         setUser(null);
         setPoints(0);
         setInventory(['default']); 
         setEquipped({ background: 'default', character: null }); 
-        setGamesPlayed(0); // 🔧 Resetujemy licznik przy wylogowaniu
-        
+        setGamesPlayed(0); 
         localStorage.removeItem("currentUser");
     }
 
-    // --- PRZYWRACANIE SESJI PO ODŚWIEŻENIU ---
     useEffect(() => {
         if (user && usersDb[user]) {
             setPoints(usersDb[user].points || 0);
             setInventory(usersDb[user].inventory || ['default']);
             setEquipped(usersDb[user].equipped || { background: 'default', character: null });
-            setGamesPlayed(usersDb[user].gamesPlayed || 0); // 🔧 Wczytaj po F5
+            setGamesPlayed(usersDb[user].gamesPlayed || 0); 
         }
         setIsDataLoaded(true);
     }, []); 
 
-    // --- ZAPISYWANIE DANYCH (Teraz zapisujemy też gamesPlayed) ---
     useEffect(() => {
         if (!isDataLoaded) return; 
-
         if (user) {
             setUsersDb(prevDb => ({
                 ...prevDb,
-                [user]: { 
-                    points,
-                    inventory,
-                    equipped,
-                    gamesPlayed // 🔧 Zapisujemy liczbę gier do bazy użytkownika
-                } 
+                [user]: { points, inventory, equipped, gamesPlayed } 
             }));
         }
     }, [points, inventory, equipped, gamesPlayed, user, isDataLoaded]);
 
-    // --- RESZTA LOGIKI (Sklep, Wygląd) ---
     useEffect(() => {
         document.body.className = `bg-${equipped.background}`;
     }, [equipped.background]);
@@ -161,8 +144,7 @@ export const AppProvider = ({children}) => {
         buyItem, equipItem, resetAppearance,
         handleLogin, handleLogout, consumeItem,
         saveScore, highScores,
-        
-        allQuestions, addQuestion,
+        allQuestions, addQuestion, // ✅ Teraz allQuestions na pewno jest pełne
         achievements, incrementGamesPlayed
     };
 

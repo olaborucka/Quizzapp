@@ -13,6 +13,8 @@ import Profile from './pages/Profile.jsx'
 import Leaderboard from './pages/Leaderboard.jsx';
 import Catalog from './pages/Catalog.jsx';
 import AddQuestion from './pages/AddQuestion.jsx';
+import Challenge from './pages/Challeng.jsx';
+
 
 function App() {
     const { user } = useContext(AppContext)
@@ -63,6 +65,7 @@ function App() {
                         path='/add-question'
                         element={user? <AddQuestion /> : <p>Zaloguj się</p>}
                     />
+                    <Route path="/challenge" element={<Challenge />} />
                 </Routes>
             </div>
         </Router>
