@@ -4,7 +4,7 @@ import { AppContext } from '../context/AppContext';
 import LifelinesPanel from '../components/game/LifelinesPanel';
 
 function Game() {
-    const { points, setPoints, inventory, consumeItem, saveScore, allQuestions} = useContext(AppContext);
+    const { points, setPoints, inventory, consumeItem, saveScore, allQuestions, incrementGamesPlayed} = useContext(AppContext);
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -72,6 +72,7 @@ function Game() {
                 date: new Date().toLocaleDateString(),
             };
             saveScore(newResult)
+            incrementGamesPlayed()
         }
     }, [isGameOver])
 
