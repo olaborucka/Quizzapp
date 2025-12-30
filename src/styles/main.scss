@@ -318,6 +318,33 @@ header {
       border: 3px solid $white; /* Użycie zmiennej */
       object-fit: contain;
     }
+    /* Efekt zamazania dla trybu wizualnego */
+    .visual-img {
+        transition: filter 0.5s ease; /* Płynne odsłanianie */
+        
+        &.blurred {
+            filter: blur(8px); /* Mocne rozmycie */
+            cursor: help;
+        }
+    }
+
+    /* Styl dla timera */
+    .timer-display {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #e74c3c; /* Czerwony kolor */
+        margin-bottom: 10px;
+        
+        &.low-time {
+            animation: pulse 0.5s infinite;
+        }
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
   }
 
   .answers-grid {
@@ -707,3 +734,31 @@ header {
   }
 }
 
+// timer 
+/* --- STYL TIMERA --- */
+.timer-display {
+    font-size: 1.8rem;      /* Duża czcionka */
+    font-weight: 800;       /* Gruby tekst */
+    color: #e74c3c;         /* Czerwony kolor */
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.5); /* Cień dla lepszej czytelności */
+    min-width: 80px;        /* Żeby nie skakał */
+    
+    &.low-time {
+        color: #ff0000;
+        animation: pulse 0.5s infinite; /* Pulsowanie gdy mało czasu */
+    }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* --- STYL DLA ZAMAZANEGO OBRAZKA --- */
+.visual-img {
+    transition: filter 0.5s ease;
+    &.blurred {
+        filter: blur(15px); /* To robi robotę! */
+    }
+}

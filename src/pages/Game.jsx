@@ -18,9 +18,11 @@ function Game() {
     const [isGameOver, setIsGameOver] = useState(false);
     const [hiddenAnswers, setHiddenAnswers] = useState([]);
 
-    // NOWOŚĆ: Stany do obsługi kolorów i blokady klikania
-    const [selectedAnswer, setSelectedAnswer] = useState(null); // Co kliknął gracz?
-    const [isProcessing, setIsProcessing] = useState(false);    // Czy czekamy na zmianę pytania?
+    const [timeleft, setTimeleft] = useState(15)
+    const [isBlurred, setIsBlurred] = useState(type === 'visual')
+
+    const [selectedAnswer, setSelectedAnswer] = useState(null);
+    const [isProcessing, setIsProcessing] = useState(false);
 
     // --- EFEKT: Ładowanie i filtrowanie ---
     useEffect(() => {
@@ -39,22 +41,40 @@ function Game() {
     }, [type, category, navigate]);
 
     useEffect(() => {
-        setHiddenAnswers([]); // Reset ukrytych odpowiedzi przy zmianie pytania
-    }, [currentQuestionIndex]);
+        setHiddenAnswers([]);
+        setTimeleft(15)
+        setIsBlurred(type === 'visual')
+    }, [currentQuestionIndex, type]);
 
     useEffect(() => {
-        if (isGameOver) {
+        if (isGameOver || isProcessing) return; // Jeśli koniec lub czekamy - stop zegara
+
+        const timerId = setInterval(() => {
+            setTimeleft((prev) => {
+                if (prev <= 1) {
+                    clearInterval(timerId);
+                    handleAnswerClick(null); // Czas minął = błędna odpowiedź (null)
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+
+        return () => clearInterval(timerId);
+    }, [currentQuestionIndex, isGameOver, isProcessing]);
+
+    useEffect(() => {
+        if (isGameOver){
             const newResult = {
-            score: score,
-            points: score * 10,
-            category: category,
-            type:type,
-            date: new Date().toLocaleDateString(),
-        };
-        saveScore(newResult);
+                score: score,
+                points: score * 10,
+                category: category,
+                type: type,
+                date: new Date().toLocaleDateString(),
+            };
+            saveScore(newResult)
         }
-        
-    }, [isGameOver]);
+    }, [isGameOver])
 
     // --- LOGIKA KLIKNIĘCIA (Z OPÓŹNIENIEM) ---
     const handleAnswerClick = (answer) => {
@@ -72,8 +92,6 @@ function Game() {
             setScore(prev => prev + 1);
             setPoints(prev => prev + 10);
             // Tu można dodać dźwięk sukcesu, np. playAudio('success');
-        } else {
-            // Tu można dodać dźwięk błędu
         }
 
         // 3. Czekamy 1.5 sekundy (1500ms), żeby gracz zobaczył kolor
@@ -92,22 +110,16 @@ function Game() {
 
     // --- FUNKCJA POMOCNICZA DO KOLOROWANIA PRZYCISKÓW ---
     const getButtonClass = (answer) => {
-        // Domyślna klasa
         let className = 'answer-btn';
-        
-        // Jeśli nic nie jest wybrane - zwróć zwykłą klasę
-        if (!selectedAnswer) return className;
+        if (!isProcessing) return className;
 
         const currentQuestion = gameQuestions[currentQuestionIndex];
 
         // LOGIKA KOLORÓW:
         if (answer === currentQuestion.correctAnswer) {
-            // Zawsze podświetlaj poprawną odpowiedź na ZIELONO (nawet jak gracz wybrał źle)
             return className + ' correct';
         }
-
-        if (answer === selectedAnswer && answer !== currentQuestion.correctAnswer) {
-            // Jeśli gracz wybrał to, a to jest błąd - podświetl na CZERWONO
+        if (answer === selectedAnswer) {
             return className + ' wrong';
         }
 
@@ -118,18 +130,18 @@ function Game() {
         fiftyFifty: 300,
         askFriend: 400,
         oneWrong: 100,
+        reveal: 200
     };
 
     const handleLifeline = (type) => {
         if (isProcessing) return;
 
-        if ((type === 'fiftyFifty' || type === 'oneWrong') && hiddenAnswers.length > 0) {
-            return; // Już użyto tego koła
-        }
+        if (type === 'reveal' && !isBlurred) return
 
         // sprawdzanie stanu 
         const hasItem = inventory.includes(type);
         const price = LIFELINE_PRICES[type];
+
         if (!hasItem) {
             if (points >= price) {
                 const confirm = window.confirm(`Nie posiadasz tego koła ratunkowego. Czy chcesz je kupić za ${price} punktów?`);
@@ -152,16 +164,17 @@ function Game() {
         const correctIndex = currentQuestion.answers.findIndex(ans => ans === currentQuestion.correctAnswer);
 
         // indexy blednych odpowiedzi
-        let wrongIndexes = [];
-        currentQuestion.answers.forEach((_ , index) => {
-            if (index !== correctIndex) {
-                wrongIndexes.push(index);
-            }
-        });
+        let wrongIndexes = currentQuestion.answers
+            .map((_, idx) => idx)
+            .filter(idx => idx !== correctIndex);
         
 
         // logika kół
         switch(type) {
+            case 'reveal':
+                setIsBlurred(false)
+                setHiddenAnswers( prev => [...prev, 'REVEALED'])
+                break
             case 'fiftyFifty':
                 wrongIndexes = wrongIndexes.sort(() => Math.random()- 0.5) ;
                 setHiddenAnswers(wrongIndexes.slice(0, 2));
@@ -241,6 +254,9 @@ function Game() {
         <div className='game-container'>
             <div className='game-header'>
                 <span>Kategoria: {category}</span>
+                <span className={`timer-display ${timeleft < 5 ? 'low-time' : ''}`}>
+                    ⏳ {timeleft}s
+                </span>
                 <span>Pytanie: {currentQuestionIndex + 1} / {gameQuestions.length} </span>
             </div>
             
@@ -249,7 +265,7 @@ function Game() {
                     <img 
                         src={currentQuestion.image} 
                         alt="Zagadka" 
-                        className='visual-img'
+                        className= {`visual-img ${isBlurred ? 'blurred' : ''}`}
                     />
                 </div>
             )}
@@ -262,6 +278,7 @@ function Game() {
                 onUseLifeline={handleLifeline}
                 isDisabled={isProcessing}
                 hiddenAnswers={hiddenAnswers}
+                gameType={type}
             />
             
             <div className='answers-grid'>
