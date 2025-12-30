@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import useLocalStorage from "../hooks/useLocalStorage"; 
-import { result } from "lodash";
+import { questions as defaultQuestions } from "../data/data";
 
 export const AppContext = createContext();
 
@@ -25,6 +25,13 @@ export const AppProvider = ({children}) => {
         background: 'default', // <--- TU BYŁ BŁĄD. Teraz jest 'default'
         character: null 
     });
+
+    const [customQuestions, setCustomQuestions] = useLocalStorage("customQuestions", [])
+    const allQuestions = [...defaultQuestions, ...customQuestions]
+    const addQuestion = (newQ) => {
+        const questionWithId = { ...newQ, id: Date.now() }; 
+        setCustomQuestions([...customQuestions, questionWithId]);
+    }
     
     // --- 1. ODZYSKIWANIE DANYCH PO ODŚWIEŻENIU (F5) ---
     useEffect(() => {
@@ -162,7 +169,8 @@ export const AppProvider = ({children}) => {
 
     const contextValue = {
         user,
-        points, setPoints,
+        points, 
+        setPoints,
         inventory,
         equipped,
         buyItem,
@@ -172,7 +180,9 @@ export const AppProvider = ({children}) => {
         handleLogout,
         consumeItem,
         saveScore,
-        highScores
+        highScores,
+        allQuestions,
+        addQuestion
     };
 
     return (

@@ -11,8 +11,8 @@ import Shop from './pages/Shop.jsx';
 import Game from './pages/Game.jsx';      
 import Profile from './pages/Profile.jsx'
 import Leaderboard from './pages/Leaderboard.jsx';
-
-
+import Catalog from './pages/Catalog.jsx';
+import AddQuestion from './pages/AddQuestion.jsx';
 
 function App() {
     const { user } = useContext(AppContext)
@@ -54,6 +54,14 @@ function App() {
                     <Route 
                         path="/leaderboard"
                         element={user ? <Leaderboard /> : <p>Zaloguj się</p>}
+                    />
+                    <Route 
+                        path="/catalog"
+                        element={user ? <Catalog /> : <p>Zaloguj się</p>}
+                    />
+                    <Route
+                        path='/add-question'
+                        element={user? <AddQuestion /> : <p>Zaloguj się</p>}
                     />
                 </Routes>
             </div>

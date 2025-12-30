@@ -1,11 +1,10 @@
 import { useState, useEffect, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
-import { questions } from '../data/data'; 
 import LifelinesPanel from '../components/game/LifelinesPanel';
 
 function Game() {
-    const { points, setPoints, inventory, consumeItem, saveScore} = useContext(AppContext);
+    const { points, setPoints, inventory, consumeItem, saveScore, allQuestions} = useContext(AppContext);
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -26,7 +25,7 @@ function Game() {
 
     // --- EFEKT: Ładowanie i filtrowanie ---
     useEffect(() => {
-        let filteredQuestions = questions.filter(q => q.type === type);
+        let filteredQuestions = allQuestions.filter(q => q.type === type);
 
         if (category !== 'MIX') {
             filteredQuestions = filteredQuestions.filter(q => q.category === category);
