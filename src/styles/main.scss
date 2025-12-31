@@ -1,7 +1,6 @@
 @import './variables';
 
-
-// LOGIKA TŁA 
+// Motywy tła
 body.bg-default {
     background-color: $bg-color; 
     color: $text-color; 
@@ -13,7 +12,7 @@ body.bg-green { background-color: #00b894; color: $white; }
 body.bg-red { background-color: #d63031; color: $white; }
 body.bg-yellow { background-color: #fdcb6e; color: $text-color; }
 
-/* --- GŁÓWNE STYLE --- */
+// Style bazowe
 body {
     margin: 0;
     padding: 0;
@@ -22,6 +21,7 @@ body {
     color: $text-color;
 }
 
+// Główny kontener
 .app {
     max-width: 800px;
     margin: 0 auto;
@@ -29,7 +29,7 @@ body {
     text-align: center;
 }
 
-/* --- HEADER --- */
+// Nagłówek
 header {
     background-color: $primary-color;
     padding: 10px;          
@@ -41,15 +41,16 @@ header {
     justify-content: center; 
     align-items: center;
 
+    // Tytuł
     h1 {
         margin: 0;
-        color: $white; /* Użycie zmiennej */
+        color: $white; 
         font-size: 1.5rem;
         text-transform: uppercase;
         letter-spacing: 2px;
     }
 
-    /* --- Styl ikony domku --- */
+    // Ikona domku
     .home-link {
         position: absolute;
         left: 20px;
@@ -60,9 +61,10 @@ header {
         .home-icon {
             width: 30px; 
             height: 30px;
-            fill: $white; /* Użycie zmiennej */
+            fill: $white; 
             transition: transform 0.2s, fill 0.2s;
 
+            // Hover domku
             &:hover {
                 transform: scale(1.1);
                 fill: $accent-color; 
@@ -70,7 +72,7 @@ header {
         }
     }
 
-    /* --- Styl ikony profilu --- */
+    // Ikona profilu
     .profile-link {
         position: absolute;
         right: 20px;
@@ -81,9 +83,10 @@ header {
         .profile-icon {
             width: 25px; 
             height: 25px;
-            fill: $white; /* Użycie zmiennej */
+            fill: $white; 
             transition: transform 0.2s, fill 0.2s;
 
+            // Hover profilu
             &:hover {
                 transform: scale(1.1);
                 fill: $accent-color; 
@@ -93,12 +96,10 @@ header {
 }
 
 
-/* --- NOWOCZESNE MENU GŁÓWNE --- */
+// Menu główne
 .game-menu {
     list-style: none;
     padding: 0;
-    
-    // Flexbox: Wyśrodkowanie i zawijanie na małych ekranach
     display: flex;
     justify-content: center;
     flex-wrap: wrap; 
@@ -107,18 +108,19 @@ header {
     margin-bottom: 40px;
 
     li {
+        // Przycisk menu
         a {
             display: flex;
-            align-items: center; // Wyrównanie ikony z tekstem
-            gap: 12px;           // Odstęp między ikoną a tekstem
+            align-items: center; 
+            gap: 12px;           
             
             background-color: $secondary-color;
             color: $white; 
             text-decoration: none;
             
             padding: 15px 30px;
-            border-radius: 50px; // Mocno zaokrąglone rogi (styl "pill")
-            border: 2px solid transparent; // Miejsce na ramkę przy hover
+            border-radius: 50px; 
+            border: 2px solid transparent; 
             
             font-size: 1.1rem;
             font-weight: bold;
@@ -127,52 +129,56 @@ header {
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 
-            // Styl dla ikon wewnątrz przycisku
+            // Ikona w przycisku
             svg {
                 transition: transform 0.3s ease;
                 filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
             }
 
-            // --- EFEKT NAJECHANIA MYSZKĄ (HOVER) ---
+            // Hover przycisku
             &:hover {
                 background-color: $accent-color;
-                transform: translateY(-5px) scale(1.05); // Uniesienie i powiększenie
-                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); // Większy cień
+                transform: translateY(-5px) scale(1.05); 
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); 
                 border-color: rgba(255, 255, 255, 0.2);
 
-                // Animacja ikony przy najechaniu
                 svg {
                     transform: rotate(10deg) scale(1.2);
                 }
             }
 
-            // Efekt kliknięcia
+            // Kliknięcie
             &:active {
                 transform: translateY(-2px) scale(0.98);
             }
         }
     }
 }
-/* --- KONTENER MENU --- */
+
+// Kontener kategorii
 .menu-container {
     max-width: 800px;
     margin: 30px auto;
     text-align: center;
     padding: 20px;
 
+    // Nagłówek sekcji
     h3 {
-        color: $white; /* Użycie zmiennej */
+        color: $white; 
         font-size: 1.8rem;
         margin-bottom: 25px;
         text-transform: uppercase;
         letter-spacing: 1px;
     }
     
+    // Siatka przycisków
     .buttons-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
         gap: 15px;
         margin-top: 20px;
+        
+      // Zablokowany tryb
       .locked {
               color: $rose;
               font-size: 1rem;
@@ -182,6 +188,8 @@ header {
               padding: 10px;
               border-radius: $border-radius;
           }
+        
+        // Przycisk kategorii
         button {
             padding: 20px;
             font-size: 1.1rem;
@@ -194,12 +202,14 @@ header {
             box-shadow: 0 4px 6px rgba(0,0,0,0.2);
             font-weight: bold;
 
+            // Hover kategorii
             &:hover {
                 background-color: $accent-color;
                 transform: translateY(-5px);
-                color: $white; /* Użycie zmiennej */
+                color: $white; 
             }
             
+            // Kliknięcie
             &:active {
                 transform: translateY(0);
             }
@@ -208,7 +218,7 @@ header {
 }
 
 
-/* --- LOG BAR (Pasek powitalny) --- */
+// Pasek logowania
 #navlogin {
     display: flex;
     position: relative;      
@@ -218,10 +228,11 @@ header {
     margin-top: 30px;
     margin-bottom: 30px;      
     padding: 20px;
-    background-color: rgba($white, 0.1); /* Elegancki zapis rgba ze zmienną */
+    background-color: rgba($white, 0.1); 
     border-radius: $border-radius;
     gap: 15px;
 
+    // Pole nicku
     input {
         padding: 12px 20px;
         font-size: 1rem;
@@ -236,11 +247,12 @@ header {
         }
     }
 
+    // Przycisk wejścia
     button {
         padding: 12px 25px;
         font-size: 1rem;
         font-weight: bold;
-        color: $white; /* Użycie zmiennej */
+        color: $white; 
         background-color: $primary-color;
         border: none;
         border-radius: $border-radius;
@@ -258,7 +270,7 @@ header {
     }
 }
 
-/* --- PUNKTY i SKLEP --- */
+// Punkty w nagłówku
 .points {
     position: absolute; 
     right: 20px;        
@@ -266,6 +278,7 @@ header {
     color: $accent-color; 
 }
 
+// Link do sklepu
 .shop {
     position: absolute;
     left: 20px;
@@ -282,7 +295,7 @@ header {
     }
 }
 
-/* --- LOGO --- */
+// Logo główne
 .main-logo {
     display: block;
     margin: 0 auto;
@@ -292,7 +305,7 @@ header {
     filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
 }
 
-/* --- EKRAN ŁADOWANIA --- */
+// Ekran ładowania
 .loading-screen {
   display: flex;
   flex-direction: column;
@@ -300,12 +313,13 @@ header {
   align-items: center;
   min-height: 300px;
   font-size: 1.5rem;
-  color: $white; /* Użycie zmiennej */
+  color: $white; 
 
   p {
     margin-bottom: 20px;
   }
 
+  // Ikona ładowania
   .loading-icon {
     width: 50px;
     height: 50px;
@@ -314,63 +328,69 @@ header {
   }
 }
 
+// Animacja obrotu
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
-/* --- STYLE DLA SAMEJ GRY (Game.jsx) --- */
+// Ekran gry
 .game-container {
   max-width: 700px;
   margin: 0 auto;
-  background-color: rgba($white, 0.1); /* Użycie zmiennej w rgba */
+  background-color: rgba($white, 0.1); 
   padding: 30px;
   border-radius: 20px;
-  color: $white; /* Użycie zmiennej */
+  color: $white; 
   text-align: center;
 
+  // Pasek statusu
   .game-header {
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
     font-weight: bold;
     color: $accent-color;
-    border-bottom: 1px solid rgba($white, 0.2); /* Użycie zmiennej w rgba */
+    border-bottom: 1px solid rgba($white, 0.2); 
     padding-bottom: 10px;
   }
 
+  // Kontener obrazka
   .visual-container {
     margin: 20px 0;
     
+    // Obrazek
     .visual-img {
       max-width: 100%;
       max-height: 300px;
       border-radius: 10px;
-      border: 3px solid $white; /* Użycie zmiennej */
+      border: 3px solid $white; 
       object-fit: contain;
     }
-    /* Efekt zamazania dla trybu wizualnego */
+    // Efekt rozmycia
     .visual-img {
-        transition: filter 0.5s ease; /* Płynne odsłanianie */
+        transition: filter 0.5s ease; 
         
         &.blurred {
-            filter: blur(8px); /* Mocne rozmycie */
+            filter: blur(8px); 
             cursor: help;
         }
     }
 
-    /* Styl dla timera */
+    // Timer
     .timer-display {
         font-size: 1.5rem;
         font-weight: bold;
-        color: #e74c3c; /* Czerwony kolor */
+        color: #e74c3c; 
         margin-bottom: 10px;
         
+        // Krytyczny czas
         &.low-time {
             animation: pulse 0.5s infinite;
         }
     }
 
+    // Animacja pulsu
     @keyframes pulse {
         0% { transform: scale(1); }
         50% { transform: scale(1.1); }
@@ -378,12 +398,14 @@ header {
     }
   }
 
+  // Siatka odpowiedzi
   .answers-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
     margin-top: 30px;
 
+    // Przycisk odpowiedzi
     .answer-btn {
       background-color: $secondary-color;
       color: $bg-color;
@@ -395,35 +417,40 @@ header {
       cursor: pointer;
       transition: all 0.2s;
 
+      // Hover odpowiedzi
       &:hover {
         background-color: $accent-color;
-        color: $white; /* Użycie zmiennej */
+        color: $white; 
         transform: scale(1.02);
       }
+      // Poprawna
       &.correct {
         background-color: #2ecc71 !important;
         border-color: #27ae60 !important;
-        color: $white !important; /* Użycie zmiennej */
+        color: $white !important; 
         transform: scale(1.05);
       }
 
+      // Błędna
       &.wrong {
         background-color: #e74c3c !important; 
         border-color: #c0392b !important;
-        color: $white !important; /* Użycie zmiennej */
+        color: $white !important; 
         opacity: 0.8;
       }
 
+      // Zablokowany
       &:disabled {
         cursor: not-allowed;
         pointer-events: none; 
       }
     }
 
-    /* Ulepszony ekran końcowy */
+    // Ekran wyników
     .result-screen {
         animation: fadeIn 0.5s ease;
         
+        // Punkty
         .score-display {
             font-size: 4rem;
             font-weight: bold;
@@ -431,6 +458,7 @@ header {
             margin: 20px 0;
         }
         
+        // Przyciski akcji
         .result-buttons {
             display: flex;
             justify-content: center;
@@ -439,19 +467,20 @@ header {
         }
     }
 
+    // Animacja wejścia
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
     }
   }
 
-  /* Styl dla przycisków na ekranie końcowym */
+  // Przyciski wyniku
   &.result-screen {
     button {
       margin-top: 20px;
       padding: 15px 30px;
       background-color: $primary-color;
-      color: $white; /* Użycie zmiennej */
+      color: $white; 
       border: none;
       border-radius: 50px;
       font-size: 1.2rem;
@@ -464,7 +493,7 @@ header {
   }
 }
 
-/* --- RWD (Na telefony) --- */
+// Responsywność
 @media (max-width: 600px) {
   .menu-container .buttons-grid, 
   .game-container .answers-grid {
@@ -472,7 +501,7 @@ header {
   }
 }
 
-/* --- PROFIL UŻYTKOWNIKA --- */
+// Profil gracza
 .profile-screen {
   text-align: center;
   display: flex;
@@ -486,24 +515,7 @@ header {
     color: $light-blue;
   }
 
-  .profile-icon-large {
-    width: 120px;
-    height: 120px;
-    background-color: rgba($white, 0.2); /* Użycie zmiennej */
-    border-radius: 50%;
-    padding: 20px;
-    margin-bottom: 10px;
-    
-    svg {
-      width: 100%;
-      height: 100%;
-      fill: $white; /* Użycie zmiennej */
-    }
-  }
-  
-  /* ... wewnątrz .profile-screen { ... */
-
-  /* --- SEKCJA ODZNAK --- */
+  // Sekcja odznak
   .badges-section {
     margin-top: 30px;
     width: 100%;
@@ -514,6 +526,7 @@ header {
       margin-bottom: 15px;
     }
 
+    // Pusta lista
     .empty-badges {
       padding: 20px;
       background: rgba(0, 0, 0, 0.2);
@@ -526,12 +539,14 @@ header {
       }
     }
 
+    // Siatka odznak
     .badges-grid {
       display: flex;
       gap: 15px;
       justify-content: center;
       flex-wrap: wrap;
 
+      // Pojedyncza odznaka
       .badge-card {
         background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
         border: 2px solid #ffd700;
@@ -550,7 +565,7 @@ header {
         transition: transform 0.2s; 
 
         &:hover {
-            transform: translateY(-5px); /* Mały efekt przy najechaniu */
+            transform: translateY(-5px); 
         }
 
         .badge-icon {
@@ -569,11 +584,26 @@ header {
       }
     }
   }
+  // Awatar
+  .profile-icon-large {
+    width: 120px;
+    height: 120px;
+    background-color: rgba($white, 0.2); 
+    border-radius: 50%;
+    padding: 20px;
+    margin-bottom: 10px;
+    
+    svg {
+      width: 100%;
+      height: 100%;
+      fill: $white; 
+    }
+  }
 
-
+  // Dane gracza
   .profile-details {
     font-size: 1.5rem;
-    color: $white; /* Użycie zmiennej */
+    color: $white; 
     
     p {
       margin: 10px 0;
@@ -584,9 +614,10 @@ header {
     }
   }
 
+  // Wylogowanie
   .logout-btn {
     background-color: $rose;
-    color: $white; /* Użycie zmiennej */
+    color: $white; 
     border: none;
     padding: 15px 40px;
     font-size: 1.2rem;
@@ -603,15 +634,15 @@ header {
 }
 
 
-/* --- SKLEP (SHOP) --- */
+// Sklep
 
 .shop-container {
   max-width: 900px;
   margin: 0 auto;
   padding: 20px;
-  color: $white; /* Użycie zmiennej */
+  color: $white; 
 
-  /* Nagłówek sklepu */
+  // Nagłówek sklepu
   .shop-header {
     text-align: center;
     margin-bottom: 30px;
@@ -637,11 +668,11 @@ header {
       }
     }
 
-    /* Przycisk Resetowania Wyglądu */
+    // Reset wyglądu
     .reset-look-btn {
       margin-top: 15px; 
-      background-color: rgba($white, 0.05); /* Użycie zmiennej */
-      border: 1px solid rgba($white, 0.3); /* Użycie zmiennej */
+      background-color: rgba($white, 0.05); 
+      border: 1px solid rgba($white, 0.3); 
       color: #dfe6e9; 
       padding: 8px 20px;
       border-radius: 25px; 
@@ -656,9 +687,9 @@ header {
       margin-right: auto;
 
       &:hover {
-        background-color: rgba($white, 0.2); /* Użycie zmiennej */
-        border-color: $white; /* Użycie zmiennej */
-        color: $white; /* Użycie zmiennej */
+        background-color: rgba($white, 0.2); 
+        border-color: $white; 
+        color: $white; 
         transform: translateY(-2px); 
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
       }
@@ -669,7 +700,7 @@ header {
     }
   }
 
-  /* Menu kategorii */
+  // Kategorie sklepu
   .shop-categories {
     display: flex;
     justify-content: center;
@@ -678,9 +709,9 @@ header {
     margin-bottom: 30px;
 
     button {
-      background-color: rgba($white, 0.1); /* Użycie zmiennej */
-      border: 1px solid rgba($white, 0.2); /* Użycie zmiennej */
-      color: $white; /* Użycie zmiennej */
+      background-color: rgba($white, 0.1); 
+      border: 1px solid rgba($white, 0.2); 
+      color: $white; 
       padding: 10px 20px;
       border-radius: 25px;
       cursor: pointer;
@@ -688,7 +719,7 @@ header {
       transition: all 0.3s ease;
 
       &:hover {
-        background-color: rgba($white, 0.25); /* Użycie zmiennej */
+        background-color: rgba($white, 0.25); 
         transform: translateY(-2px);
       }
 
@@ -699,15 +730,16 @@ header {
     }
   }
 
-  /* Siatka produktów */
+  // Siatka produktów
   .shop-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
 
+    // Karta produktu
     .shop-card {
       background-color: rgba(0, 0, 0, 0.6); 
-      border: 1px solid rgba($white, 0.1); /* Użycie zmiennej */
+      border: 1px solid rgba($white, 0.1); 
       border-radius: 15px;
       padding: 20px;
       display: flex;
@@ -735,7 +767,7 @@ header {
         font-weight: bold;
       }
 
-      /* PRZYCISK (KUP / SVG) */
+      // Przycisk zakupu
       .buy-btn {
         width: 100%;
         min-height: 40px; 
@@ -749,7 +781,7 @@ header {
         transition: background-color 0.3s;
 
         background-color: #e67e22; 
-        color: $white; /* Użycie zmiennej */
+        color: $white; 
 
         &:hover {
           background-color: #d35400;
@@ -768,29 +800,30 @@ header {
         svg {
           width: 20px;
           height: 20px;
-          fill: $white; /* Użycie zmiennej */
+          fill: $white; 
         }
       }
     }
   }
 }
 
-//leaderboard
+// Tabela wyników
 
-/* --- Style dla Tabeli Wyników --- */
+// Kontener tabeli
 .leaderboard-container {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
   text-align: center;
-  color: white; /* Ważne, żeby tekst był biały na ciemnym tle! */
+  color: white; 
 }
 
+// Tabela
 .leaderboard-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-  background-color: rgba(0, 0, 0, 0.3); /* Lekko przyciemnione tło tabeli */
+  background-color: rgba(0, 0, 0, 0.3); 
 }
 
 .leaderboard-table th, 
@@ -801,16 +834,16 @@ header {
 }
 
 .leaderboard-table th {
-  background-color: #e67e22; /* Pomarańczowy nagłówek */
+  background-color: #e67e22; 
   color: white;
   font-weight: bold;
 }
 
 .leaderboard-table tr:nth-child(even) {
-  background-color: rgba(255, 255, 255, 0.05); /* Paski co drugi wiersz */
+  background-color: rgba(255, 255, 255, 0.05); 
 }
 
-/* Przyciski filtrów */
+// Filtry rankingu
 .filter-buttons {
   margin-bottom: 20px;
   display: flex;
@@ -835,18 +868,18 @@ header {
   }
 }
 
-// timer 
-/* --- STYL TIMERA --- */
+// Timer globalny
+// Styl czasu
 .timer-display {
-    font-size: 1.8rem;      /* Duża czcionka */
-    font-weight: 800;       /* Gruby tekst */
-    color: #e74c3c;         /* Czerwony kolor */
-    text-shadow: 2px 2px 0px rgba(0,0,0,0.5); /* Cień dla lepszej czytelności */
-    min-width: 80px;        /* Żeby nie skakał */
+    font-size: 1.8rem;      
+    font-weight: 800;       
+    color: #e74c3c;         
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.5); 
+    min-width: 80px;        
     
     &.low-time {
         color: #ff0000;
-        animation: pulse 0.5s infinite; /* Pulsowanie gdy mało czasu */
+        animation: pulse 0.5s infinite; 
     }
 }
 
@@ -856,10 +889,102 @@ header {
     100% { transform: scale(1); }
 }
 
-/* --- STYL DLA ZAMAZANEGO OBRAZKA --- */
+// Rozmycie obrazka
 .visual-img {
     transition: filter 0.5s ease;
     &.blurred {
-        filter: blur(15px); /* To robi robotę! */
+        filter: blur(15px); 
+    }
+}
+
+/* --- KREATOR PYTAŃ (Formularz) --- */
+.add-question-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: left;
+    margin-top: 20px;
+
+    // Kontener dla dwóch elementów obok siebie (Typ i Kategoria)
+    .form-row {
+        display: flex;
+        gap: 20px;
+        
+        // Na telefonach ustaw jeden pod drugim
+        @media (max-width: 600px) {
+            flex-direction: column;
+            gap: 15px;
+        }
+    }
+
+    // Pojedyncza grupa (Etykieta + Pole)
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        flex: 1; 
+        gap: 8px;
+
+        label {
+            font-weight: bold;
+            color: $light-blue;
+            font-size: 0.9rem;
+            margin-left: 5px;
+        }
+
+        // Styl pól tekstowych i selectów
+        input, select {
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            background-color: rgba(255, 255, 255, 0.9);
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            color: #2d3436;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            width: 100%; 
+            box-sizing: border-box; 
+
+            &:focus {
+                border-color: $primary-color;
+                box-shadow: 0 0 10px rgba($primary-color, 0.3);
+            }
+        }
+
+        // Specjalny styl dla poprawnej odpowiedzi (zielony)
+        &.correct-answer {
+            label { color: #2ecc71; }
+            input { border: 2px solid #2ecc71; }
+        }
+    }
+
+    // Sekcja zmyłek (w ramce)
+    .wrong-answers-box {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 20px;
+        border-radius: 15px;
+        background-color: rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    // Przycisk dodawania
+    .submit-btn {
+        margin-top: 10px;
+        padding: 15px;
+        background-color: #e67e22;
+        color: white;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.2s, background-color 0.2s;
+
+        &:hover {
+            background-color: #d35400;
+            transform: scale(1.02);
+        }
     }
 }

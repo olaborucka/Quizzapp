@@ -1,8 +1,6 @@
-import React from 'react';
 
 function LifelinesPanel({ inventory, onUseLifeline, isDisabled, hiddenAnswers, gameType }) {
     
-    // Konfiguracja kół (musi pasować do ID ze sklepu!)
     const LIFELINES_DATA = [
         { id: 'fiftyFifty',  name: ' 50/50',    price: 300 },
         { id: 'askFriend',   name: ' Telefon',  price: 400 },
@@ -13,14 +11,11 @@ function LifelinesPanel({ inventory, onUseLifeline, isDisabled, hiddenAnswers, g
     return (
         <div className="lifelines-panel" style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginBottom: '20px', flexWrap: 'wrap' }}>
             
-            {/* Generujemy przyciski w pętli - mniej kodu, większy porządek */}
             {LIFELINES_DATA.map(lifeline => {
                 if (lifeline.id === 'reveal' && gameType !== 'visual'){
                     return null
                 }
                 const isRevealed = hiddenAnswers.includes('REVEALED')
-                // Czy przycisk powinien być zablokowany?
-                // Blokujemy jeśli: gra myśli (isDisabled) LUB (jeśli to koło usuwające odpowiedzi i już coś ukryto)
                 const isBlocked = isDisabled || 
                 (['fiftyFifty', 'oneWrong'].includes(lifeline.id) && hiddenAnswers.length > 0) ||
                 (lifeline.id === 'reveal' && isRevealed);

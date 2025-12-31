@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 function useLocalStorage(key, initialValue) {
-    // 1. Inicjalizacja (odczyt z pamięci)
+    // odczyt z pamięci
     const [storedValue, setStoredValue] = useState(() => {
         try {
             const item = window.localStorage.getItem(key);
@@ -12,7 +12,7 @@ function useLocalStorage(key, initialValue) {
         }
     });
 
-    // 2. Zapisywanie przy każdej zmianie
+    // Zapisywanie przy każdej zmianie
     useEffect(() => {
         try {
             window.localStorage.setItem(key, JSON.stringify(storedValue));

@@ -8,7 +8,6 @@ function TextGame(){
     const { inventory } = useContext(AppContext);
 
     const isMixUnlocked = inventory.includes('MIX-textMode');
-    // Ta funkcja uruchamia grę 
     const startGame = (selectedCategory) => {
         navigate('/play', {
             state: {
