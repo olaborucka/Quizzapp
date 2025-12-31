@@ -65,10 +65,9 @@ function Shop(){
             </div>
             
             <div className='shop-categories'>
-                {/* ... przyciski kategorii są OK ... */}
                 <button onClick={() => setActiveCategory('background')}>Tło</button>
                 <button onClick={() => setActiveCategory('character')}>Postać</button>
-                <button onClick={() => setActiveCategory('lifeline')}>Koła ratunkowe</button>
+                {/* <button onClick={() => setActiveCategory('lifeline')}>Koła ratunkowe</button> */}
                 <button onClick={() => setActiveCategory('gameMode-visual')}>Tryby wizualne</button>
                 <button onClick={() => setActiveCategory('gameMode-text')}>Tryby tekstowe</button>
             </div>
@@ -80,8 +79,6 @@ function Shop(){
                     <div key={item.id} className='shop-card'>
                         <h4>{item.name}</h4>
                         <p className='price'>Cena: {item.price} punktów</p>
-                        
-                        {/* ❌ STĄD USUŃ PRZYCISK RESETU (bo tu się powtarzał) */}
 
                         <button 
                             className='buy-btn' 

@@ -9,8 +9,6 @@ function VisualGame() {
     const { inventory } = useContext(AppContext);
 
     const isMixUnlocked = inventory.includes('MIX-visualMode');
-
-    // Ta funkcja uruchamia grę
     const startGame = (selectedCategory) => {
         navigate('/play', { 
             state: { 

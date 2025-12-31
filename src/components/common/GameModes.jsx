@@ -12,7 +12,7 @@ function GameModes(){
                         <svg 
                             xmlns="http://www.w3.org/2000/svg" 
                             viewBox="0 0 640 640" 
-                            fill="gold" // Złoty kolor pucharu!
+                            fill="gold"
                             width="35" 
                             height="30"
                         >
@@ -54,7 +54,6 @@ function GameModes(){
                 <li style={{ marginTop: '20px' }}>
                     <button 
                         onClick={() => {
-                            // Generuje link np. http://localhost:3000/challenge?type=visual
                             const link = `${window.location.origin}/challenge?type=visual&category=MIX`;
                             navigator.clipboard.writeText(link);
                             alert("Skopiowano link do wyzwania! Wyślij go znajomemu.");

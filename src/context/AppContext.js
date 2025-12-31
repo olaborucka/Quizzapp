@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import useLocalStorage from "../hooks/useLocalStorage"; 
-import { questions as defaultQuestions } from "../data/data"; // ✅ 1. Importujemy dane bezpośrednio
+import { questions as defaultQuestions } from "../data/data"; 
 
 export const AppContext = createContext();
 
@@ -11,10 +11,9 @@ export const AppProvider = ({children}) => {
     const [isDataLoaded, setIsDataLoaded] = useState(false);
     const [highScores, setHighScores] = useLocalStorage("highScores", []);
     
-    // --- PYTANIA ---
+    // PYTANIA
     const [customQuestions, setCustomQuestions] = useLocalStorage("customQuestions", []);
     
-    // ✅ 2. Łączymy zaimportowane pytania z własnymi (To zawsze działa)
     const allQuestions = [...defaultQuestions, ...customQuestions];
 
     const addQuestion = (newQ) => {
@@ -22,7 +21,7 @@ export const AppProvider = ({children}) => {
         setCustomQuestions([...customQuestions, questionWithId]);
     };
 
-    // --- STANY GRACZA ---
+    // STANY GRACZA
     const [points, setPoints] = useState(0);
     const [inventory, setInventory] = useState(['default']); 
     const [equipped, setEquipped] = useState({ background: 'default', character: null });
@@ -49,7 +48,7 @@ export const AppProvider = ({children}) => {
         setGamesPlayed(prev => prev + 1);
     };
 
-    // --- LOGIKA LOGOWANIA I ZAPISU (Bez zmian) ---
+    // LOGIKA LOGOWANIA I ZAPISU
     const handleLogin = (nick) => {
         setUser(nick);
         setIsDataLoaded(true); 
@@ -144,7 +143,7 @@ export const AppProvider = ({children}) => {
         buyItem, equipItem, resetAppearance,
         handleLogin, handleLogout, consumeItem,
         saveScore, highScores,
-        allQuestions, addQuestion, // ✅ Teraz allQuestions na pewno jest pełne
+        allQuestions, addQuestion,
         achievements, incrementGamesPlayed
     };
 

@@ -23,7 +23,7 @@ function Game() {
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
 
-    // --- EFEKT: Ładowanie i filtrowanie ---
+    // Ładowanie i filtrowanie 
     useEffect(() => {
         let filteredQuestions = allQuestions.filter(q => q.type === type);
 
@@ -46,13 +46,13 @@ function Game() {
     }, [currentQuestionIndex, type]);
 
     useEffect(() => {
-        if (isGameOver || isProcessing) return; // Jeśli koniec lub czekamy - stop zegara
+        if (isGameOver || isProcessing) return;
 
         const timerId = setInterval(() => {
             setTimeleft((prev) => {
                 if (prev <= 1) {
                     clearInterval(timerId);
-                    handleAnswerClick(null); // Czas minął = błędna odpowiedź (null)
+                    handleAnswerClick(null);
                     return 0;
                 }
                 return prev - 1;
@@ -76,46 +76,40 @@ function Game() {
         }
     }, [isGameOver])
 
-    // --- LOGIKA KLIKNIĘCIA (Z OPÓŹNIENIEM) ---
+    // LOGIKA KLIKNIĘCIA
     const handleAnswerClick = (answer) => {
-        // 1. Jeśli już coś kliknięto i czekamy - ignoruj kolejne kliknięcia
         if (isProcessing) return;
 
-        setIsProcessing(true);       // Blokujemy przyciski
-        setSelectedAnswer(answer);   // Zapisujemy co wybrano (żeby pokolorować)
+        setIsProcessing(true);
+        setSelectedAnswer(answer);  
 
         const currentQuestion = gameQuestions[currentQuestionIndex];
         const isCorrect = answer === currentQuestion.correctAnswer;
 
-        // 2. Jeśli dobrze - dodaj punkty (ale jeszcze nie zmieniaj pytania!)
+
         if (isCorrect) {
             setScore(prev => prev + 1);
             setPoints(prev => prev + 10);
-            // Tu można dodać dźwięk sukcesu, np. playAudio('success');
         }
-
-        // 3. Czekamy 1.5 sekundy (1500ms), żeby gracz zobaczył kolor
         setTimeout(() => {
             const nextQuestionIndex = currentQuestionIndex + 1;
             
             if (nextQuestionIndex < gameQuestions.length) {
                 setCurrentQuestionIndex(nextQuestionIndex);
-                setSelectedAnswer(null); // Reset wyboru
-                setIsProcessing(false);  // Odblokowujemy przyciski
+                setSelectedAnswer(null); 
+                setIsProcessing(false); 
             } else {
                 setIsGameOver(true);
             }
         }, 1500); 
     };
 
-    // --- FUNKCJA POMOCNICZA DO KOLOROWANIA PRZYCISKÓW ---
+    //FUNKCJA POMOCNICZA DO KOLOROWANIA PRZYCISKÓW
     const getButtonClass = (answer) => {
         let className = 'answer-btn';
         if (!isProcessing) return className;
 
         const currentQuestion = gameQuestions[currentQuestionIndex];
-
-        // LOGIKA KOLORÓW:
         if (answer === currentQuestion.correctAnswer) {
             return className + ' correct';
         }
@@ -138,7 +132,6 @@ function Game() {
 
         if (type === 'reveal' && !isBlurred) return
 
-        // sprawdzanie stanu 
         const hasItem = inventory.includes(type);
         const price = LIFELINE_PRICES[type];
 
@@ -204,7 +197,7 @@ function Game() {
 
 
 
-    // --- RENDER 1: ŁADOWANIE ---
+    // RENDER
     if (gameQuestions.length === 0) {
         return (
             <div className="game-container loading-screen">
@@ -217,7 +210,7 @@ function Game() {
         );
     }
 
-    // --- RENDER 2: KONIEC GRY (ROZBUDOWANY) ---
+    // KONIEC GRY
     if (isGameOver) {
         return (
             <div className="game-container result-screen">
@@ -228,8 +221,6 @@ function Game() {
                 </div>
                 
                 <p>Zdobyłeś łącznie: <strong>{score * 10} 💰</strong></p>
-
-                {/* Wiadomość zależna od wyniku */}
                 <p>
                     {score === gameQuestions.length ? "Perfekcyjnie! Jesteś mistrzem! 🏆" : 
                      score > gameQuestions.length / 2 ? "Dobra robota! 👍" : 
@@ -238,7 +229,6 @@ function Game() {
 
                 <div className="result-buttons">
                     <button onClick={() => navigate('/')}>Menu Główne</button>
-                    {/* Przeładowanie strony resetuje grę */}
                     <button onClick={() => window.location.reload()}>Zagraj ponownie</button>
                 </div>
                 <button onClick={() => navigate('/leaderboard')}>🏆 Zobacz Wyniki</button>
@@ -249,7 +239,7 @@ function Game() {
     const currentQuestion = gameQuestions[currentQuestionIndex];
     
 
-    // --- RENDER 3: GRA WŁAŚCIWA ---
+    // GRA WŁAŚCIWA
     return(
         <div className='game-container'>
             <div className='game-header'>
@@ -292,7 +282,6 @@ function Game() {
                             className={getButtonClass(answer)}
                             onClick={() => handleAnswerClick(answer)}
                             disabled={isProcessing}
-                            // Dzięki temu ukrywamy odpowiedź:
                             style={{ visibility: isHidden ? 'hidden' : 'visible' }}
                         >
                             {answer}

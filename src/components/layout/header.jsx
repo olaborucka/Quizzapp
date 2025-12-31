@@ -36,7 +36,7 @@ const getCharacterIcon = (characterId, className) => {
                 </svg>
             );
 
-        // Domyślny ludzik (gdy nic nie wybrano lub case default)
+        // Domyślny ludzik
         default:
             return (
                 <svg {...props}>
