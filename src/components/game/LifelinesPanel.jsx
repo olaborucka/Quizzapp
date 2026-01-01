@@ -11,11 +11,15 @@ function LifelinesPanel({ inventory, onUseLifeline, isDisabled, hiddenAnswers, g
     return (
         <div className="lifelines-panel" style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginBottom: '20px', flexWrap: 'wrap' }}>
             
+            {/* generator przyciskow */}
             {LIFELINES_DATA.map(lifeline => {
+                {/* ukrycie reveal w tekstowym*/}
                 if (lifeline.id === 'reveal' && gameType !== 'visual'){
                     return null
                 }
+
                 const isRevealed = hiddenAnswers.includes('REVEALED')
+                {/* 1 pytanie jedno koło*/}
                 const isBlocked = isDisabled || 
                 (['fiftyFifty', 'oneWrong'].includes(lifeline.id) && hiddenAnswers.length > 0) ||
                 (lifeline.id === 'reveal' && isRevealed);

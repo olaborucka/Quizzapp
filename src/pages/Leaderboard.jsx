@@ -12,6 +12,7 @@ function Leaderboard() {
             .filter(entry => filter === 'ALL' ? true : entry.category === filter)
             .sort((a,b) => b.points - a.points)
     }, [highScores, filter])
+
     const allCategories = highScores.map(entry => entry.category);
     const uniqueCategories = ['ALL', ...new Set(allCategories)];
 
@@ -20,7 +21,7 @@ function Leaderboard() {
     return (
         <div className="leaderboard-container">
             <h2>Tablica Wyników 🏆</h2>
-            
+             {/*  przyciski kategorii*/}
             <div className="filter-buttons">
                 {uniqueCategories.map((categoryName) => (
                     <button 
@@ -43,6 +44,7 @@ function Leaderboard() {
                         <th>Data</th>
                     </tr>
                 </thead>
+                {/* wiersze */}
                 <tbody>
                     
                     {sortedScores.map((entry, index) => (

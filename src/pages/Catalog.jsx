@@ -4,6 +4,8 @@ import { AppContext } from "../context/AppContext";
 function Catalog(){
     const [filterCategory, setFilterCategory] = useState('ALL')
     const { allQuestions } = useContext(AppContext);
+
+    // tablica kategorii
     const categories = ['ALL', ...new Set(allQuestions.map(q => q.category))]
      
     const questionss = allQuestions;

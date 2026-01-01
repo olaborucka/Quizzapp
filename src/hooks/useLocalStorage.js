@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
+// odczyt z pamięci przegladarki
 
 function useLocalStorage(key, initialValue) {
-    // odczyt z pamięci
+    //inicjalizacja
     const [storedValue, setStoredValue] = useState(() => {
         try {
             const item = window.localStorage.getItem(key);
+            // zmiana formatu
             return item ? JSON.parse(item) : initialValue;
         } catch (error) {
             console.log(error);

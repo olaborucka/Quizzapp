@@ -4,10 +4,13 @@ import { AppContext } from '../context/AppContext';
 import LifelinesPanel from '../components/game/LifelinesPanel';
 
 function Game() {
+
     const { points, setPoints, inventory, consumeItem, saveScore, allQuestions, incrementGamesPlayed} = useContext(AppContext);
+
     const location = useLocation();
     const navigate = useNavigate();
 
+    // zabezpieczenie przed blednym adresem
     const { type, category } = location.state || { type: 'text', category: 'MIX' };
 
     // --- STANY ---
@@ -39,12 +42,14 @@ function Game() {
         }
     }, [type, category, navigate]);
 
+    // resetowanie pytania
     useEffect(() => {
-        setHiddenAnswers([]);
+        setHiddenAnswers([]); // czysci koła
         setTimeleft(15)
         setIsBlurred(type === 'visual')
     }, [currentQuestionIndex, type]);
 
+    // timer
     useEffect(() => {
         if (isGameOver || isProcessing) return;
 
@@ -52,7 +57,7 @@ function Game() {
             setTimeleft((prev) => {
                 if (prev <= 1) {
                     clearInterval(timerId);
-                    handleAnswerClick(null);
+                    handleAnswerClick(null); // jesli brak odpowiedzi = 0ptk
                     return 0;
                 }
                 return prev - 1;
@@ -62,6 +67,7 @@ function Game() {
         return () => clearInterval(timerId);
     }, [currentQuestionIndex, isGameOver, isProcessing]);
 
+    // koniec gry
     useEffect(() => {
         if (isGameOver){
             const newResult = {
@@ -76,7 +82,7 @@ function Game() {
         }
     }, [isGameOver])
 
-    // LOGIKA KLIKNIĘCIA
+    // klikanie odp
     const handleAnswerClick = (answer) => {
         if (isProcessing) return;
 
@@ -94,6 +100,7 @@ function Game() {
         setTimeout(() => {
             const nextQuestionIndex = currentQuestionIndex + 1;
             
+            // kolejne pytanie albo koniec gry
             if (nextQuestionIndex < gameQuestions.length) {
                 setCurrentQuestionIndex(nextQuestionIndex);
                 setSelectedAnswer(null); 
@@ -119,6 +126,7 @@ function Game() {
 
         return className;
     };
+    
     // koła ratunkowe 
     const LIFELINE_PRICES = {
         fiftyFifty: 300,
@@ -135,6 +143,7 @@ function Game() {
         const hasItem = inventory.includes(type);
         const price = LIFELINE_PRICES[type];
 
+        //kupowanie
         if (!hasItem) {
             if (points >= price) {
                 const confirm = window.confirm(`Nie posiadasz tego koła ratunkowego. Czy chcesz je kupić za ${price} punktów?`);
@@ -152,7 +161,7 @@ function Game() {
             consumeItem(type);
         }
 
-        // efekty kół
+        
         const currentQuestion = gameQuestions[currentQuestionIndex];
         const correctIndex = currentQuestion.answers.findIndex(ans => ans === currentQuestion.correctAnswer);
 
@@ -202,7 +211,6 @@ function Game() {
         return (
             <div className="game-container loading-screen">
                 <p>Ładowanie pytań...</p>
-                {/* Ikona ładowania */}
                 <svg className='loading-icon' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
                     <path d="M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48 21.49-48 48-48 48 21.49 48 48zm-48 368c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zm208-208c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zM96 256c0-26.51-21.49-48-48-48S0 229.49 0 256s21.49 48 48 48 48-21.49 48-48zm12.922 99.078c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.491-48-48-48zm294.156 0c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.49-48-48-48zM108.922 60.922c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.491-48-48-48z"/>
                 </svg>

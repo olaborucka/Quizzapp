@@ -108,6 +108,28 @@ header {
     margin-bottom: 40px;
 
     li {
+      // przycisk wyzwania
+      .challenge-btn {
+        width: 100%;
+        padding: 15px 30px;
+        border-radius: 50px;
+        border: none;
+        
+        background-color: #6c5ce7; // Fioletowy kolor
+        color: $white; // Używamy zmiennej ze stylów
+        
+        font-weight: bold;
+        font-size: 1.1rem;
+        cursor: pointer;
+        
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      }
         // Przycisk menu
         a {
             display: flex;

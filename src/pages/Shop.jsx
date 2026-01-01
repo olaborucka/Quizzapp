@@ -67,7 +67,6 @@ function Shop(){
             <div className='shop-categories'>
                 <button onClick={() => setActiveCategory('background')}>Tło</button>
                 <button onClick={() => setActiveCategory('character')}>Postać</button>
-                {/* <button onClick={() => setActiveCategory('lifeline')}>Koła ratunkowe</button> */}
                 <button onClick={() => setActiveCategory('gameMode-visual')}>Tryby wizualne</button>
                 <button onClick={() => setActiveCategory('gameMode-text')}>Tryby tekstowe</button>
             </div>

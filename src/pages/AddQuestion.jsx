@@ -5,7 +5,8 @@ import { AppContext } from "../context/AppContext";
 function AddQuestion() {
     const { addQuestion } = useContext(AppContext);
     const navigate = useNavigate();
-
+     
+    // stan formularza 1 obiekt 
     const [formData, setFormData] = useState({
         type: 'text',
         category: 'Inne',
@@ -18,6 +19,7 @@ function AddQuestion() {
         image: ''
     });
 
+    // obsluga zmian
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
@@ -26,6 +28,7 @@ function AddQuestion() {
         }));
     };
 
+    // wysyłanie 
     const handleSubmit = (e) => {
         e.preventDefault();
 

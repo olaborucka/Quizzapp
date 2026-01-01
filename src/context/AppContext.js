@@ -5,8 +5,9 @@ import { questions as defaultQuestions } from "../data/data";
 export const AppContext = createContext();
 
 export const AppProvider = ({children}) => {
-
+    // dane uzytkownikow
     const [usersDb, setUsersDb] = useLocalStorage("quizUsersDB", {});
+
     const [user, setUser] = useLocalStorage("currentUser", null);
     const [isDataLoaded, setIsDataLoaded] = useState(false);
     const [highScores, setHighScores] = useLocalStorage("highScores", []);
@@ -28,6 +29,7 @@ export const AppProvider = ({children}) => {
     const [gamesPlayed, setGamesPlayed] = useState(0); 
     const [achievements, setAchievements] = useState([]); 
 
+    // odznaki
     const BADGES = [
         { id: 1, name: "Początkujący",      condition: (pts, games) => games >= 1 },
         { id: 2, name: "Średniozaawansowany", condition: (pts, games) => games >= 10 },
@@ -65,6 +67,7 @@ export const AppProvider = ({children}) => {
         }
     }
 
+    // wylogowanie
     const handleLogout = () => {
         setIsDataLoaded(false); 
         setUser(null);
@@ -75,7 +78,9 @@ export const AppProvider = ({children}) => {
         localStorage.removeItem("currentUser");
     }
 
+    // odswiezanie strony 
     useEffect(() => {
+        // jesli nie bylo logout to nedzie pamietac z localstorage
         if (user && usersDb[user]) {
             setPoints(usersDb[user].points || 0);
             setInventory(usersDb[user].inventory || ['default']);
@@ -85,6 +90,7 @@ export const AppProvider = ({children}) => {
         setIsDataLoaded(true);
     }, []); 
 
+    // aktualizacja bazy 
     useEffect(() => {
         if (!isDataLoaded) return; 
         if (user) {
@@ -95,10 +101,13 @@ export const AppProvider = ({children}) => {
         }
     }, [points, inventory, equipped, gamesPlayed, user, isDataLoaded]);
 
+    // zmiana tła 
     useEffect(() => {
         document.body.className = `bg-${equipped.background}`;
     }, [equipped.background]);
 
+
+    // logika sklepu
     const buyItem = (item) => {
         if (item.price <= points && !inventory.includes(item.item)) {
             setPoints(points - item.price);
@@ -116,6 +125,8 @@ export const AppProvider = ({children}) => {
         return false;
     }
 
+    // ranking 
+    
     const saveScore = (result) => {
         const newEntry = { user: user, ...result };
         const updatedScores = [...highScores, newEntry];
@@ -123,10 +134,8 @@ export const AppProvider = ({children}) => {
         setHighScores(updatedScores.slice(0, 50));
     }
     
-    const resetAppearance = () => {
-        setEquipped({ background: 'default', character: null });
-    }
 
+    // zuzywanie przedmiotow
     const consumeItem = (itemId) => {
         if (inventory.includes(itemId)) {
             const copy = [...inventory];
@@ -138,9 +147,10 @@ export const AppProvider = ({children}) => {
         return false;
     }
 
+    // eksport danych
     const contextValue = {
         user, points, setPoints, inventory, equipped,
-        buyItem, equipItem, resetAppearance,
+        buyItem, equipItem, 
         handleLogin, handleLogout, consumeItem,
         saveScore, highScores,
         allQuestions, addQuestion,

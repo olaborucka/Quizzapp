@@ -8,20 +8,21 @@ function LogBar(){
 
     const navigate = useNavigate();
     const location = useLocation();
-
-    const hiddenPaths = ['/play', '/game/visual', '/game/text'];
     
+    //ukrywanie logowania
+    const hiddenPaths = ['/play', '/game/visual', '/game/text'];
     if (hiddenPaths.includes(location.pathname)) {
         return null;
     }
 
+    //logowanie
     const onEnterClick = () =>{
         if (inputValue.trim() !== ""){
             handleLogin(inputValue);
             navigate('/');
         }
     }
-
+    //zalogowany
     if (user) {
         return(
             <nav id='navlogin' className='logged-in'>
@@ -32,6 +33,8 @@ function LogBar(){
             </nav>
         )
     }
+
+    // nie zalogowany
     return(
         <nav id='navlogin'>
             <div>
